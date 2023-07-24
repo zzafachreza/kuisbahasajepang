@@ -11,15 +11,13 @@ import 'intl';
 import 'intl/locale-data/jsonp/en';
 import moment from 'moment';
 import 'moment/locale/id';
+import CountDown from 'react-native-countdown-component';
 import SoundPlayer from 'react-native-sound-player'
 import ViewShot from "react-native-view-shot";
 import Share from 'react-native-share';
 
-export default function SoalTask({ navigation, route }) {
-
+export default function SoalTaskSimpan({ navigation, route }) {
     const ref = useRef();
-
-
     const item = route.params;
     const isFocus = useIsFocused();
     const [data, setData] = useState([]);
@@ -32,8 +30,6 @@ export default function SoalTask({ navigation, route }) {
     const [modal2, setModal2] = useState(false);
     const [modal3, setModal3] = useState(false);
 
-    const kode = route.params.level + route.params.halaman;
-
     const [sudah, setSudah] = useState([]);
 
     const __getTransaction = () => {
@@ -41,26 +37,12 @@ export default function SoalTask({ navigation, route }) {
 
         getData('user').then(u => {
             setUser(u);
-        });
-
-        getData(kode).then(ok => {
-            let tmp;
-            if (!ok) {
-                setSudah([]);
-                tmp = [];
-            } else {
-                setSudah(ok);
-                tmp = ok;
-            };
-
-            console.log('yang sudah', tmp);
-
-            axios.post(apiURL + 'soal', {
+            axios.post(apiURL + 'soal_tersimpan', {
                 level: item.level,
+                fid_user: u.id,
                 halaman: route.params.halaman,
-                sudah: tmp
             }).then(res => {
-                console.log(res.data);
+                console.log(res.data.length);
 
                 if (res.data.length > 0) {
                     res.data.map(i => {
@@ -90,8 +72,7 @@ export default function SoalTask({ navigation, route }) {
                             {
                                 text: 'COBA LAGI',
                                 onPress: () => {
-                                    setSudah([]);
-                                    storeData(kode, []);
+
                                     navigation.goBack();
                                 }
                             }
@@ -105,9 +86,22 @@ export default function SoalTask({ navigation, route }) {
             })
         });
 
+
+
+
+
+
     }
     const [nomor, setNomor] = useState(0);
     const [pilih, setPilih] = useState([]);
+    const [waktu, setWaktu] = useState(10)
+
+    const sendWaktuHabis = () => {
+        setModal2(true);
+        setWaktu(10);
+    }
+
+
     useEffect(() => {
 
 
@@ -162,17 +156,13 @@ export default function SoalTask({ navigation, route }) {
         } else if (nilai >= 80) {
             setNilaiIndex('Sasuga senpai, tauorareru hitu desune, Selamat senpai hebat');
         }
-        setNILAI(Math.round(nilai, 2));
+        setNILAI(nilai);
 
         const kirim = {
-            nilai: Math.round(nilai, 2),
+            nilai: nilai,
             fid_user: user.id,
             level: route.params.level
         }
-
-        axios.post(apiURL + 'nilai_add', kirim).then(response => {
-            console.log(response.data)
-        })
 
 
 
@@ -311,7 +301,6 @@ export default function SoalTask({ navigation, route }) {
                             paddingRight: 5,
                         }}>
                             <TouchableOpacity onPress={() => {
-
                                 let pilihan = null
 
                                 if (pilih[nomor].a) {
@@ -338,10 +327,7 @@ export default function SoalTask({ navigation, route }) {
 
 
 
-
-
                                 setModal2(false);
-
                                 let tmpSudah = sudah;
                                 tmpSudah.push(data[nomor].id);
                                 setSudah(tmpSudah);
@@ -372,6 +358,7 @@ export default function SoalTask({ navigation, route }) {
                         }}>
                             <TouchableOpacity onPress={() => {
 
+
                                 let pilihan = null
 
                                 if (pilih[nomor].a) {
@@ -385,6 +372,7 @@ export default function SoalTask({ navigation, route }) {
                                     pilihan = data[nomor].d;
                                 }
 
+
                                 if (user.suara == 1) {
                                     if (pilihan == data[nomor].jawaban) {
 
@@ -394,7 +382,6 @@ export default function SoalTask({ navigation, route }) {
                                         SoundPlayer.playSoundFile('failed', 'mp3')
                                     }
                                 }
-
 
                                 setModal2(false);
                                 sendServer();
@@ -525,7 +512,7 @@ export default function SoalTask({ navigation, route }) {
                                     index: 0,
                                     routes: [{ name: 'Splash' }],
                                 });
-                                storeData(kode, []);
+
                             }} style={{
                                 backgroundColor: colors.secondary,
                                 padding: 10,
@@ -583,19 +570,14 @@ export default function SoalTask({ navigation, route }) {
                     fontSize: 30,
                     color: colors.white
                 }}>{item.level}</Text>
-                <Text style={{
-                    flex: 1,
-                    textAlign: 'center',
-                    fontFamily: fonts.secondary[800],
-                    fontSize: 30,
-                    color: colors.white
-                }}>{(item.awal + 1) + nomor} - {data.length}</Text>
+
 
 
 
 
 
             </View>
+
 
 
             {open && <View style={{
@@ -606,56 +588,41 @@ export default function SoalTask({ navigation, route }) {
                 paddingHorizontal: 20,
 
             }}>
-                <TouchableOpacity onPress={() => setModal1(true)} style={{
-                    padding: 2,
-                }}>
-                    <Icon type='ionicon' name='arrow-back-circle' color={colors.white} size={50} />
-                </TouchableOpacity>
+                {nomor > 0 &&
+                    <TouchableOpacity onPress={() => {
 
 
-                {(pilih[nomor].a || pilih[nomor].b || pilih[nomor].c || pilih[nomor].d || data[nomor].tersimpan > 0) &&
-                    <View style={{
-                        flex: 1,
-                        alignItems: 'center'
+                        if (nomor > 0) {
+                            setNomor(nomor - 1);
+                        }
+
+                    }} style={{
+                        padding: 2,
                     }}>
-                        <TouchableOpacity onPress={() => {
-                            const kirim = {
-                                level: item.level,
-                                fid_user: user.id,
-                                fid_soal: data[nomor].id,
-                                halaman: data[nomor].halaman
-                            }
+                        <Icon type='ionicon' name='arrow-back-circle' color={colors.white} size={50} />
+                    </TouchableOpacity>}
+                <Text style={{
+                    flex: 1,
+                    textAlign: 'center',
+                    fontFamily: fonts.secondary[800],
+                    fontSize: 15,
+                    color: colors.white
+                }}>TERSIMPAN {data.length} SOAL</Text>
 
-                            console.log(kirim);
-                            axios.post(apiURL + 'save_soal', kirim).then(res => {
-                                console.log(res.data);
-                                Alert.alert(MYAPP, 'Soal berhasil di simpan !');
-
-                            })
-                        }} style={{
-                            backgroundColor: colors.white,
-                            borderRadius: 25,
-                            paddingVertical: 5,
-                            paddingHorizontal: 25,
-                            flexDirection: 'row',
-                            alignItems: 'center'
-
-                        }}><Icon type='ionicon' name='checkmark-circle' color={colors.success} size={30} />
-                            <Text style={{
-                                left: 5,
-                                fontFamily: fonts.secondary[800],
-                                fontSize: 15
-                            }}>Simpan</Text>
-                        </TouchableOpacity>
-
-                    </View>
-                }
-
-
-                {(pilih[nomor].a || pilih[nomor].b || pilih[nomor].c || pilih[nomor].d) && <TouchableOpacity onPress={() => setModal2(true)} style={{
+                {nomor < (data.length - 1) && <TouchableOpacity onPress={() => {
+                    setNomor(nomor + 1);
+                }} style={{
                     padding: 2,
                 }}>
                     <Icon type='ionicon' name='arrow-forward-circle' color={colors.white} size={50} />
+                </TouchableOpacity>}
+
+                {nomor == (data.length - 1) && <TouchableOpacity onPress={() => {
+                    setModal3(true)
+                }} style={{
+                    padding: 2,
+                }}>
+                    <Icon type='ionicon' name='checkmark-circle' color={colors.white} size={50} />
                 </TouchableOpacity>}
 
             </View>}
@@ -898,21 +865,7 @@ export default function SoalTask({ navigation, route }) {
                             color: colors.white
                         }}>{data[nomor].d}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setModal3(true)} style={{
 
-                        padding: 20,
-                        borderRadius: 10,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: colors.primary,
-                        marginTop: 20,
-                    }}>
-                        <Text style={{
-                            fontFamily: fonts.secondary[600],
-                            fontSize: 20,
-                            color: colors.white
-                        }}>Nilai</Text>
-                    </TouchableOpacity>
                 </View>
 
 

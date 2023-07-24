@@ -13,11 +13,11 @@ import moment from 'moment';
 import 'moment/locale/id';
 import MyCarouser from '../../components/MyCarouser';
 
-const ListTombol = ({ onPress, label }) => {
+const ListTombol = ({ onPress, label, level }) => {
 
   return (
     <TouchableOpacity onPress={onPress} style={{
-      backgroundColor: colors.secondary,
+      backgroundColor: level > 0 ? colors.secondary : colors.black,
       padding: 20,
       borderRadius: 10,
       borderWidth: 3,
@@ -37,16 +37,26 @@ const ListTombol = ({ onPress, label }) => {
 
 export default function Home({ navigation, route }) {
 
+
   const [user, setUser] = useState({});
   const isFocus = useIsFocused();
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [comp, setComp] = useState({});
+  const [DATALEVEL, SETDATALEVEL] = useState({});
 
   const _getTransaction = async () => {
 
     await getData('user').then(u => {
       setUser(u);
+      axios.post(apiURL + 'get_current_level', {
+        fid_user: u.id
+      }).then(rr => {
+        console.log(rr.data);
+        SETDATALEVEL(rr.data);
+        setOpen(true)
+      })
+
     })
 
     await axios.post(apiURL + 'company').then(res => {
@@ -55,12 +65,7 @@ export default function Home({ navigation, route }) {
 
     });
 
-    await axios.post(apiURL + 'rumah_sakit').then(res => {
 
-      console.log(res.data);
-      setData(res.data);
-
-    });
   }
 
 
@@ -70,36 +75,7 @@ export default function Home({ navigation, route }) {
     }
   }, [isFocus]);
 
-  const __renderItem = ({ item }) => {
-    return (
-      <TouchableWithoutFeedback onPress={() => navigation.navigate('InfoPdf', item)}>
-        <View style={{
-          flex: 1,
-          width: 170,
-          height: 120,
-          padding: 10,
-          borderWidth: 1,
-          borderRadius: 10,
-          borderColor: colors.primary,
-          margin: 5,
-        }}>
-          <Image source={{
-            uri: item.image
-          }} style={{
-            width: '100%',
-            height: 60,
-            resizeMode: 'contain',
-            marginBottom: 10,
-          }} />
-          <Text style={{
-            fontFamily: fonts.secondary[600],
-            fontSize: 12,
-            textAlign: 'center'
-          }}>{item.nama_rs}</Text>
-        </View>
-      </TouchableWithoutFeedback>
-    )
-  }
+
 
 
   return (
@@ -133,6 +109,35 @@ export default function Home({ navigation, route }) {
             height: 50
           }} />
         </TouchableNativeFeedback>
+        <TouchableOpacity onPress={() => {
+
+          if (user.suara == 1) {
+
+            axios.post(apiURL + 'update_suara', {
+              id: user.id,
+              suara: 0
+            }).then(res => {
+              setUser(res.data);
+              storeData('user', res.data);
+            })
+
+          } else {
+            axios.post(apiURL + 'update_suara', {
+              id: user.id,
+              suara: 1
+            }).then(res => {
+              setUser(res.data);
+              storeData('user', res.data);
+            })
+
+          }
+
+        }} style={{
+          padding: 10,
+        }}>
+          <Icon type='ionicon' name={user.suara == 1 ? 'volume-high' : 'volume-mute'} size={30} />
+
+        </TouchableOpacity>
       </View>
 
       <Text style={{
@@ -148,22 +153,28 @@ export default function Home({ navigation, route }) {
         textAlign: 'center',
       }}>BAHASA JEPANG</Text>
 
-      <View style={{
-        flex: 1,
-        padding: 20,
-        justifyContent: 'center'
-      }}>
+      {open &&
 
-        <ListTombol label="BASIC" onPress={() => navigation.navigate('SoalBasic')} />
-        <ListTombol label="N5" onPress={() => navigation.navigate('SoalN5')} />
-        <ListTombol label="N4" onPress={() => navigation.navigate('SoalN4')} />
-        <ListTombol label="N3" />
-        <ListTombol label="N2" />
+        <View style={{
+          flex: 1,
+          padding: 20,
+          justifyContent: 'center'
+        }}>
+
+          <ListTombol label="BASIC" level={1} onPress={() => navigation.navigate('SoalBasicPilihan')} />
+          <ListTombol level={DATALEVEL.BASIC} label="N5" onPress={() => {
+            DATALEVEL.BASIC == 0 ? Alert.alert(MYAPP, 'Level BASIC belum selesai !') : navigation.navigate('SoalN5Pilihan')
+          }} />
+          <ListTombol level={DATALEVEL.N5} label="N4" onPress={() => {
+            DATALEVEL.N5 == 0 ? Alert.alert(MYAPP, 'Level N5 belum selesai !') : navigation.navigate('SoalN4Pilihan')
+          }} />
+          <ListTombol level={0} label="N3" />
+          <ListTombol level={0} label="N2" />
 
 
 
 
-      </View>
+        </View>}
 
     </SafeAreaView >
   )

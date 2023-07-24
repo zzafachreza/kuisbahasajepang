@@ -4,7 +4,7 @@ export const colors = {
   tertiary: '#9F9F9F',
   foourty: '#F2EDE1',
   background: '#0090D4',
-  success: '#078422',
+  success: '#45A834',
   warning: '#F37120',
   danger: '#FF0000',
   black: 'black',

@@ -13,7 +13,11 @@ import SoalBasic from './SoalBasic';
 import SoalN4 from './SoalN4';
 import SoalN5 from './SoalN5';
 import SoalTask from './SoalTask';
-
+import SoalBasicPilihan from './SoalBasicPilihan';
+import SoalN5Pilihan from './SoalN5Pilihan';
+import SoalN4Pilihan from './SoalN4Pilihan';
+import SoalTaskWaktu from './SoalTaskWaktu';
+import SoalTaskSimpan from './SoalTaskSimpan';
 
 
 
@@ -33,6 +37,10 @@ export {
   SoalBasic,
   SoalN4,
   SoalN5,
-  SoalTask
-
+  SoalTask,
+  SoalBasicPilihan,
+  SoalN5Pilihan,
+  SoalN4Pilihan,
+  SoalTaskWaktu,
+  SoalTaskSimpan
 };

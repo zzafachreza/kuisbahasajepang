@@ -11,15 +11,13 @@ import 'intl';
 import 'intl/locale-data/jsonp/en';
 import moment from 'moment';
 import 'moment/locale/id';
+import CountDown from 'react-native-countdown-component';
 import SoundPlayer from 'react-native-sound-player'
 import ViewShot from "react-native-view-shot";
 import Share from 'react-native-share';
 
-export default function SoalTask({ navigation, route }) {
-
+export default function SoalTaskWaktu({ navigation, route }) {
     const ref = useRef();
-
-
     const item = route.params;
     const isFocus = useIsFocused();
     const [data, setData] = useState([]);
@@ -43,71 +41,67 @@ export default function SoalTask({ navigation, route }) {
             setUser(u);
         });
 
-        getData(kode).then(ok => {
-            let tmp;
-            if (!ok) {
-                setSudah([]);
-                tmp = [];
+
+
+        axios.post(apiURL + 'soal_waktu', {
+            level: item.level,
+            halaman: route.params.halaman,
+        }).then(res => {
+            console.log(res.data);
+
+            if (res.data.length > 0) {
+                res.data.map(i => {
+                    skor.push(0);
+                    betul.push(false);
+                    pilih.push(
+                        {
+                            a: false,
+                            b: false,
+                            c: false,
+                            d: false
+                        }
+                    )
+                })
+                setData(res.data);
+                setTimeout(() => {
+                    setOpen(true)
+                }, 500);
             } else {
-                setSudah(ok);
-                tmp = ok;
-            };
 
-            console.log('yang sudah', tmp);
+                if (tmp.length > 0) {
+                    Alert.alert('Cepat Bisa GOI日本語 (JLPT, JFT, NAT)', 'Kamu sudah mengerjakan semua soal !', [
+                        {
+                            text: 'KEMBALI',
+                            onPress: () => navigation.goBack()
+                        },
+                        {
+                            text: 'COBA LAGI',
+                            onPress: () => {
 
-            axios.post(apiURL + 'soal', {
-                level: item.level,
-                halaman: route.params.halaman,
-                sudah: tmp
-            }).then(res => {
-                console.log(res.data);
-
-                if (res.data.length > 0) {
-                    res.data.map(i => {
-                        skor.push(0);
-                        betul.push(false);
-                        pilih.push(
-                            {
-                                a: false,
-                                b: false,
-                                c: false,
-                                d: false
+                                navigation.goBack();
                             }
-                        )
-                    })
-                    setData(res.data);
-                    setTimeout(() => {
-                        setOpen(true)
-                    }, 500);
+                        }
+                    ])
                 } else {
-
-                    if (tmp.length > 0) {
-                        Alert.alert('Cepat Bisa GOI日本語 (JLPT, JFT, NAT)', 'Kamu sudah mengerjakan semua soal !', [
-                            {
-                                text: 'KEMBALI',
-                                onPress: () => navigation.goBack()
-                            },
-                            {
-                                text: 'COBA LAGI',
-                                onPress: () => {
-                                    setSudah([]);
-                                    storeData(kode, []);
-                                    navigation.goBack();
-                                }
-                            }
-                        ])
-                    } else {
-                        Alert.alert('Maaf soal belum tersedia !')
-                    }
-
+                    Alert.alert('Maaf soal belum tersedia !')
                 }
 
-            })
-        });
+            }
+
+        })
+
 
     }
     const [nomor, setNomor] = useState(0);
     const [pilih, setPilih] = useState([]);
+    const [waktu, setWaktu] = useState(10)
+
+    const sendWaktuHabis = () => {
+        setModal2(true);
+        setWaktu(10);
+    }
+
+
     useEffect(() => {
 
 
@@ -162,17 +156,13 @@ export default function SoalTask({ navigation, route }) {
         } else if (nilai >= 80) {
             setNilaiIndex('Sasuga senpai, tauorareru hitu desune, Selamat senpai hebat');
         }
-        setNILAI(Math.round(nilai, 2));
+        setNILAI(nilai);
 
         const kirim = {
-            nilai: Math.round(nilai, 2),
+            nilai: nilai,
             fid_user: user.id,
             level: route.params.level
         }
-
-        axios.post(apiURL + 'nilai_add', kirim).then(response => {
-            console.log(response.data)
-        })
 
 
 
@@ -311,7 +301,6 @@ export default function SoalTask({ navigation, route }) {
                             paddingRight: 5,
                         }}>
                             <TouchableOpacity onPress={() => {
-
                                 let pilihan = null
 
                                 if (pilih[nomor].a) {
@@ -338,10 +327,7 @@ export default function SoalTask({ navigation, route }) {
 
 
 
-
-
                                 setModal2(false);
-
                                 let tmpSudah = sudah;
                                 tmpSudah.push(data[nomor].id);
                                 setSudah(tmpSudah);
@@ -372,6 +358,7 @@ export default function SoalTask({ navigation, route }) {
                         }}>
                             <TouchableOpacity onPress={() => {
 
+
                                 let pilihan = null
 
                                 if (pilih[nomor].a) {
@@ -385,6 +372,7 @@ export default function SoalTask({ navigation, route }) {
                                     pilihan = data[nomor].d;
                                 }
 
+
                                 if (user.suara == 1) {
                                     if (pilihan == data[nomor].jawaban) {
 
@@ -394,7 +382,6 @@ export default function SoalTask({ navigation, route }) {
                                         SoundPlayer.playSoundFile('failed', 'mp3')
                                     }
                                 }
-
 
                                 setModal2(false);
                                 sendServer();
@@ -589,7 +576,7 @@ export default function SoalTask({ navigation, route }) {
                     fontFamily: fonts.secondary[800],
                     fontSize: 30,
                     color: colors.white
-                }}>{(item.awal + 1) + nomor} - {data.length}</Text>
+                }}>{1 + nomor} - {data.length}</Text>
 
 
 
@@ -597,6 +584,115 @@ export default function SoalTask({ navigation, route }) {
 
             </View>
 
+            {/* <View style={{
+                flexDirection: 'row',
+                height: 40,
+            }}>
+                <View style={{
+                    flex: 1,
+                }}>
+                    {nomor > 0 && <TouchableOpacity onPress={() => {
+                        // data.length
+                        setNomor(nomor - 1);
+                    }} style={{
+                        padding: 5,
+                        height: 40,
+                        backgroundColor: colors.secondary,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <Icon type='ionicon' name='arrow-back' color={colors.white} />
+                        <Text style={{
+                            left: 10,
+                            fontFamily: 'Poppins-SemiBold',
+                            color: colors.white,
+                            fontSize: 12
+                        }}>Sebelumnya</Text>
+                    </TouchableOpacity>}
+                </View>
+
+                <View style={{
+                    flex: 1,
+                }}>
+                    <TouchableOpacity onPress={sendServer} style={{
+                        padding: 5,
+                        height: 40,
+                        backgroundColor: colors.tertiary,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <Text style={{
+                            fontFamily: 'Poppins-SemiBold',
+                            color: colors.white,
+                            fontSize: 12
+                        }}>Nilai</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={{
+                    flex: 1,
+                    height: 40,
+                }}>
+                    {nomor < (data.length - 1) &&
+                        <TouchableOpacity onPress={() => {
+                            // data.length
+                            console.log()
+
+                            if (!pilih[nomor].a && !pilih[nomor].b && !pilih[nomor].c && !pilih[nomor].d) {
+                                Alert.alert(MYAPP, 'Silahkan pilih jawaban terlebih dahulu !')
+                            } else {
+                                let tmpSudah = sudah;
+                                tmpSudah.push(data[nomor].id);
+                                setSudah(tmpSudah);
+                                storeData(kode, tmpSudah);
+                                setNomor(nomor + 1);
+                            }
+
+                        }} style={{
+                            padding: 5,
+                            height: 40,
+
+                            backgroundColor: colors.secondary,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+
+                            <Text style={{
+
+                                fontFamily: 'Poppins-SemiBold',
+                                color: colors.white,
+                                fontSize: 12,
+                                right: 10
+                            }}>Berikutnya</Text>
+
+                            <Icon type='ionicon' name='arrow-forward' color={colors.white} />
+
+                        </TouchableOpacity>}
+
+                    {nomor == (data.length - 1) &&
+                        <TouchableOpacity onPress={sendServer} style={{
+                            padding: 5,
+                            height: 40,
+                            flexDirection: 'row',
+                            backgroundColor: colors.success,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+
+                            <Text style={{
+
+
+                                fontFamily: 'Poppins-SemiBold',
+                                color: colors.white,
+                                fontSize: 12
+                            }}>Selesai</Text>
+
+                        </TouchableOpacity>}
+                </View>
+            </View> */}
 
             {open && <View style={{
                 marginTop: 10,
@@ -613,43 +709,7 @@ export default function SoalTask({ navigation, route }) {
                 </TouchableOpacity>
 
 
-                {(pilih[nomor].a || pilih[nomor].b || pilih[nomor].c || pilih[nomor].d || data[nomor].tersimpan > 0) &&
-                    <View style={{
-                        flex: 1,
-                        alignItems: 'center'
-                    }}>
-                        <TouchableOpacity onPress={() => {
-                            const kirim = {
-                                level: item.level,
-                                fid_user: user.id,
-                                fid_soal: data[nomor].id,
-                                halaman: data[nomor].halaman
-                            }
 
-                            console.log(kirim);
-                            axios.post(apiURL + 'save_soal', kirim).then(res => {
-                                console.log(res.data);
-                                Alert.alert(MYAPP, 'Soal berhasil di simpan !');
-
-                            })
-                        }} style={{
-                            backgroundColor: colors.white,
-                            borderRadius: 25,
-                            paddingVertical: 5,
-                            paddingHorizontal: 25,
-                            flexDirection: 'row',
-                            alignItems: 'center'
-
-                        }}><Icon type='ionicon' name='checkmark-circle' color={colors.success} size={30} />
-                            <Text style={{
-                                left: 5,
-                                fontFamily: fonts.secondary[800],
-                                fontSize: 15
-                            }}>Simpan</Text>
-                        </TouchableOpacity>
-
-                    </View>
-                }
 
 
                 {(pilih[nomor].a || pilih[nomor].b || pilih[nomor].c || pilih[nomor].d) && <TouchableOpacity onPress={() => setModal2(true)} style={{
@@ -657,6 +717,41 @@ export default function SoalTask({ navigation, route }) {
                 }}>
                     <Icon type='ionicon' name='arrow-forward-circle' color={colors.white} size={50} />
                 </TouchableOpacity>}
+                <View style={{
+                    flex: 1,
+                }} />
+
+                <View>
+                    <CountDown
+                        id={data[nomor].id.toString()}
+                        until={waktu}
+                        onFinish={sendWaktuHabis}
+                        onPress={() => alert('hello')}
+                        timeToShow={['M', 'S']}
+                        digitStyle={{ backgroundColor: colors.white }}
+                        timeLabels={{ m: null, s: null }}
+                        showSeparator
+                        size={20}
+                    />
+
+                    <CountDown
+                        id={'last' + data[nomor].id.toString()}
+                        until={waktu - 5}
+                        onFinish={() => {
+                            if (user.suara == 1) {
+                                SoundPlayer.playSoundFile('timer', 'mp3')
+                            }
+                        }}
+                        onPress={() => alert('hello')}
+                        timeToShow={['M', 'S']}
+                        digitStyle={{ backgroundColor: colors.white }}
+                        timeLabels={{ m: null, s: null }}
+                        showSeparator
+                        size={0}
+                    />
+                </View>
+
+
 
             </View>}
 
@@ -898,7 +993,7 @@ export default function SoalTask({ navigation, route }) {
                             color: colors.white
                         }}>{data[nomor].d}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setModal3(true)} style={{
+                    <TouchableOpacity onPress={sendServer} style={{
 
                         padding: 20,
                         borderRadius: 10,

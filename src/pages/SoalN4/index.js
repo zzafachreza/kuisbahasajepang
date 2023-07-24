@@ -11,8 +11,9 @@ import 'intl';
 import 'intl/locale-data/jsonp/en';
 import moment from 'moment';
 import 'moment/locale/id';
+import { MyButton } from '../../components';
 
-const ListTombol = ({ onPress, label, selesai }) => {
+const ListTombol = ({ onPress, label, selesai = '', jumlah_soal = 50 }) => {
 
     return (
         <TouchableOpacity onPress={onPress} style={{
@@ -34,7 +35,7 @@ const ListTombol = ({ onPress, label, selesai }) => {
                 fontFamily: fonts.secondary[400],
                 fontSize: 20,
                 color: colors.white
-            }}>{selesai}/50</Text>
+            }}>{selesai.toString()}/{jumlah_soal}</Text>
         </TouchableOpacity>
     )
 }
@@ -45,55 +46,135 @@ export default function SoalN4({ navigation, route }) {
     const JUMLAH_SOAL = 1250;
     const JUMLAH_LEVEL = JUMLAH_SOAL / 50;
     const LEVEL = [];
-    for (let i = 0; i < JUMLAH_LEVEL; i++) {
+    const THELEVEL = 'N4';
+    const SUDAH = [];
+
+    const [SELESAI, SETSELESAI] = useState([]);
+
+
+    getData(THELEVEL + 0).then(r => {
+        let vv = 0;
+        if (!r) {
+            vv = 0;
+        } else {
+            vv = r.length;
+        }
+        SUDAH.push(parseInt(vv));
+    })
+
+    for (let i = 1; i <= JUMLAH_LEVEL; i++) {
         LEVEL.push(i);
+        let awal = i * 50;
+        let akhir = (JUMLAH_SOAL / (JUMLAH_LEVEL)) + (50 * i);
+
+        getData(THELEVEL + i).then(r => {
+            let vv = 0;
+            if (!r) {
+                vv = 0;
+            } else {
+                vv = r.length;
+            }
+            SUDAH.push(parseInt(vv));
+        })
+
     }
+
+
+    const isFocus = useIsFocused();
+    const [open, setOpen] = useState(false);
+
+    const [jumlah, setJumlah] = useState(0);
+
+
+    useEffect(() => {
+        if (isFocus) {
+            __getJumlahSoal();
+
+            setTimeout(() => {
+                SETSELESAI(SUDAH)
+                console.log('sudah', SUDAH);
+                setOpen(true)
+            }, 1000)
+        }
+    }, [isFocus]);
+
+
+    const __getJumlahSoal = () => {
+        console.log('cek')
+        axios.post(apiURL + 'get_jumlah_soal', {
+            level: THELEVEL
+        }).then(res => {
+            console.log(res.data);
+            setJumlah(res.data)
+        })
+    }
+
 
     return (
         <SafeAreaView style={{
             flex: 1,
             backgroundColor: colors.white
         }}>
-            <View style={{
-                flexDirection: 'row',
-                backgroundColor: colors.secondary,
-                padding: 5,
-                height: 80,
-                alignItems: 'center'
-            }}>
-                <Text style={{
-                    flex: 1,
-                    textAlign: 'center',
-                    fontFamily: fonts.secondary[800],
-                    fontSize: 30,
-                    color: colors.white
-                }}>N4</Text>
+            {open && <>
 
-
-
-            </View>
-
-            <ScrollView>
                 <View style={{
-                    flex: 1,
-                    padding: 20,
-                    justifyContent: 'center'
+                    flexDirection: 'row',
+                    backgroundColor: colors.secondary,
+                    padding: 5,
+                    height: 80,
+                    alignItems: 'center'
                 }}>
-                    {LEVEL.map(i => {
+                    <Text style={{
+                        flex: 1,
+                        textAlign: 'center',
+                        fontFamily: fonts.secondary[800],
+                        fontSize: 30,
+                        color: colors.white
+                    }}>{THELEVEL}</Text>
 
-                        let awal = i * 50;
-                        let akhir = (JUMLAH_SOAL / (JUMLAH_LEVEL)) + (50 * i);
-                        return (
-                            <ListTombol label={i + 1} selesai={0} onPress={() => navigation.navigate('SoalTask', {
-                                level: 'BASIC',
-                                awal: awal,
-                                akhir: akhir
-                            })} />
-                        )
-                    })}
+
+
                 </View>
-            </ScrollView>
 
+                <ScrollView>
+                    <View style={{
+                        flex: 1,
+                        padding: 20,
+                        justifyContent: 'center'
+                    }}>
+
+                        <ListTombol label="MULAI SEMUA SOAL" selesai={SELESAI.reduce((partialSum, a) => partialSum + a, 0)} jumlah_soal={jumlah} onPress={() => {
+
+                            navigation.navigate('SoalTask', {
+                                level: THELEVEL,
+                                awal: 0,
+                                akhir: jumlah,
+                                halaman: 0
+                            })
+
+                        }} />
+
+                        {LEVEL.map(i => {
+
+                            let awal = i * 50;
+                            let akhir = (JUMLAH_SOAL / (JUMLAH_LEVEL)) + (50 * i);
+                            return (
+                                <ListTombol label={i} jumlah_soal={jumlah} selesai={SELESAI[i]} onPress={() => {
+                                    // console.log(i)
+                                    navigation.navigate('SoalTask', {
+                                        level: THELEVEL,
+                                        awal: awal,
+                                        akhir: akhir,
+                                        halaman: i
+                                    })
+
+                                }} />
+                            )
+                        })}
+                    </View>
+                </ScrollView>
+
+            </>}
         </SafeAreaView>
     )
 }
