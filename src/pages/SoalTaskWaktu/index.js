@@ -26,6 +26,9 @@ export default function SoalTaskWaktu({ navigation, route }) {
     const [betul, setBetul] = useState([]);
     const [skor, setSkor] = useState([]);
 
+    const [openjawaban, setOpenJawaban] = useState(false);
+    const [soalTersimpan, setSoalTersimpan] = useState([]);
+
     const [modal1, setModal1] = useState(false);
     const [modal2, setModal2] = useState(false);
     const [modal3, setModal3] = useState(false);
@@ -33,6 +36,8 @@ export default function SoalTaskWaktu({ navigation, route }) {
     const kode = route.params.level + route.params.halaman;
 
     const [sudah, setSudah] = useState([]);
+
+    const [salah, setSalah] = useState(0);
 
     const __getTransaction = () => {
 
@@ -94,7 +99,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
     }
     const [nomor, setNomor] = useState(0);
     const [pilih, setPilih] = useState([]);
-    const [waktu, setWaktu] = useState(10)
+    const [waktu, setWaktu] = useState(30)
 
     const sendWaktuHabis = () => {
         setModal2(true);
@@ -584,115 +589,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
 
             </View>
 
-            {/* <View style={{
-                flexDirection: 'row',
-                height: 40,
-            }}>
-                <View style={{
-                    flex: 1,
-                }}>
-                    {nomor > 0 && <TouchableOpacity onPress={() => {
-                        // data.length
-                        setNomor(nomor - 1);
-                    }} style={{
-                        padding: 5,
-                        height: 40,
-                        backgroundColor: colors.secondary,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        <Icon type='ionicon' name='arrow-back' color={colors.white} />
-                        <Text style={{
-                            left: 10,
-                            fontFamily: 'Poppins-SemiBold',
-                            color: colors.white,
-                            fontSize: 12
-                        }}>Sebelumnya</Text>
-                    </TouchableOpacity>}
-                </View>
 
-                <View style={{
-                    flex: 1,
-                }}>
-                    <TouchableOpacity onPress={sendServer} style={{
-                        padding: 5,
-                        height: 40,
-                        backgroundColor: colors.tertiary,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        <Text style={{
-                            fontFamily: 'Poppins-SemiBold',
-                            color: colors.white,
-                            fontSize: 12
-                        }}>Nilai</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={{
-                    flex: 1,
-                    height: 40,
-                }}>
-                    {nomor < (data.length - 1) &&
-                        <TouchableOpacity onPress={() => {
-                            // data.length
-                            console.log()
-
-                            if (!pilih[nomor].a && !pilih[nomor].b && !pilih[nomor].c && !pilih[nomor].d) {
-                                Alert.alert(MYAPP, 'Silahkan pilih jawaban terlebih dahulu !')
-                            } else {
-                                let tmpSudah = sudah;
-                                tmpSudah.push(data[nomor].id);
-                                setSudah(tmpSudah);
-                                storeData(kode, tmpSudah);
-                                setNomor(nomor + 1);
-                            }
-
-                        }} style={{
-                            padding: 5,
-                            height: 40,
-
-                            backgroundColor: colors.secondary,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
-
-                            <Text style={{
-
-                                fontFamily: 'Poppins-SemiBold',
-                                color: colors.white,
-                                fontSize: 12,
-                                right: 10
-                            }}>Berikutnya</Text>
-
-                            <Icon type='ionicon' name='arrow-forward' color={colors.white} />
-
-                        </TouchableOpacity>}
-
-                    {nomor == (data.length - 1) &&
-                        <TouchableOpacity onPress={sendServer} style={{
-                            padding: 5,
-                            height: 40,
-                            flexDirection: 'row',
-                            backgroundColor: colors.success,
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
-
-                            <Text style={{
-
-
-                                fontFamily: 'Poppins-SemiBold',
-                                color: colors.white,
-                                fontSize: 12
-                            }}>Selesai</Text>
-
-                        </TouchableOpacity>}
-                </View>
-            </View> */}
 
             {open && <View style={{
                 marginTop: 10,
@@ -749,6 +646,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                         showSeparator
                         size={0}
                     />
+
                 </View>
 
 
@@ -795,24 +693,37 @@ export default function SoalTaskWaktu({ navigation, route }) {
                     flex: 1,
                     padding: 20,
                 }}>
+
+
                     <TouchableOpacity
                         onPress={() => {
+                            setOpenJawaban(true);
                             if (!pilih[nomor].a) {
+
                                 pilih[nomor] = { b: false, c: false, d: false, a: true };
                                 setPilih([...pilih])
 
                                 if (data[nomor].jawaban == data[nomor].a && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
+                                    SoundPlayer.playSoundFile('success', 'mp3')
                                     skor[nomor] = 1;
+                                } else if (data[nomor].jawaban != data[nomor].a && !betul[nomor]) {
+                                    betul[nomor] = true;
+                                    setBetul([...betul])
+                                    setSalah(salah + 1)
+                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].a && betul[nomor]) {
                                     betul[nomor] = false;
                                     setBetul([...betul])
                                     skor[nomor] = skor[nomor] - 1;
+
                                 } else if (data[nomor].jawaban !== data[nomor].a && betul[nomor]) {
                                     betul[nomor] = false;
                                     setBetul([...betul])
                                     skor[nomor] = skor[nomor] - 1;
+
                                 }
                             } else {
                                 pilih[nomor] = { ...pilih[nomor], a: false };
@@ -821,18 +732,40 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                     betul[nomor] = false;
                                     setBetul([...betul])
                                     skor[nomor] = skor[0] - 1;
+
                                 }
 
                             }
+
+                            setTimeout(() => {
+                                if (nomor < parseFloat(data.length) - 1 && salah < 5) {
+                                    let tmpSudah = sudah;
+                                    tmpSudah.push(data[nomor].id);
+                                    setSudah(tmpSudah);
+                                    storeData(kode, tmpSudah);
+                                    setNomor(nomor + 1);
+                                } else {
+                                    sendServer();
+                                    setModal3(true);
+                                    let tmpSudah = sudah;
+                                    tmpSudah.push(data[nomor].id);
+                                    setSudah(tmpSudah);
+                                    storeData(kode, tmpSudah);
+                                }
+
+
+                            }, 1000)
 
                         }}
                         style={{
                             flexDirection: 'row',
                             marginVertical: 5,
                             position: 'relative',
-                            backgroundColor: pilih[nomor].a ? colors.primary : colors.secondary,
+                            backgroundColor: pilih[nomor].a && data[nomor].jawaban !== data[nomor].a ? colors.danger : colors.secondary,
                             padding: 20,
                             borderRadius: 10,
+                            borderWidth: openjawaban && data[nomor].jawaban == data[nomor].a ? 5 : 0,
+                            borderColor: openjawaban && data[nomor].jawaban == data[nomor].a ? colors.success : colors.white,
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
@@ -847,14 +780,21 @@ export default function SoalTaskWaktu({ navigation, route }) {
                     <TouchableOpacity
 
                         onPress={() => {
+                            setOpenJawaban(true);
                             if (!pilih[nomor].b) {
                                 pilih[nomor] = { a: false, c: false, d: false, b: true };
                                 setPilih([...pilih])
                                 if (data[nomor].jawaban == data[nomor].b && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-
+                                    SoundPlayer.playSoundFile('success', 'mp3')
                                     skor[nomor] = 1;
+                                } else if (data[nomor].jawaban != data[nomor].b && !betul[nomor]) {
+                                    betul[nomor] = true;
+                                    setBetul([...betul])
+                                    setSalah(salah + 1)
+                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].b && betul[nomor]) {
                                     betul[nomor] = false;
                                     setBetul([...betul])
@@ -875,13 +815,32 @@ export default function SoalTaskWaktu({ navigation, route }) {
 
                             }
 
+                            setTimeout(() => {
+                                if (nomor < parseFloat(data.length) - 1 && salah < 5) {
+                                    let tmpSudah = sudah;
+                                    tmpSudah.push(data[nomor].id);
+                                    setSudah(tmpSudah);
+                                    storeData(kode, tmpSudah);
+                                    setNomor(nomor + 1);
+                                } else {
+                                    sendServer();
+                                    setModal3(true);
+                                    let tmpSudah = sudah;
+                                    tmpSudah.push(data[nomor].id);
+                                    setSudah(tmpSudah);
+                                    storeData(kode, tmpSudah);
+                                }
+                            }, 1000)
+
                         }}
 
                         style={{
                             flexDirection: 'row',
                             marginVertical: 5,
                             position: 'relative',
-                            backgroundColor: pilih[nomor].b ? colors.primary : colors.secondary,
+                            backgroundColor: pilih[nomor].b && data[nomor].jawaban !== data[nomor].b ? colors.danger : colors.secondary,
+                            borderWidth: openjawaban && data[nomor].jawaban == data[nomor].b ? 5 : 0,
+                            borderColor: openjawaban && data[nomor].jawaban == data[nomor].b ? colors.success : colors.white,
                             padding: 20,
                             borderRadius: 10,
                             justifyContent: 'center',
@@ -897,14 +856,21 @@ export default function SoalTaskWaktu({ navigation, route }) {
                     <TouchableOpacity
 
                         onPress={() => {
-
+                            setOpenJawaban(true);
                             if (!pilih[nomor].c) {
                                 pilih[nomor] = { b: false, a: false, d: false, c: true };
                                 setPilih([...pilih])
                                 if (data[nomor].jawaban == data[nomor].c && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
+                                    SoundPlayer.playSoundFile('success', 'mp3')
                                     skor[nomor] = 1;
+                                } else if (data[nomor].jawaban != data[nomor].c && !betul[nomor]) {
+                                    betul[nomor] = true;
+                                    setBetul([...betul])
+                                    setSalah(salah + 1)
+                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].c && betul[nomor]) {
                                     betul[nomor] = false;
                                     setBetul([...betul])
@@ -924,6 +890,22 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 }
 
                             }
+                            setTimeout(() => {
+                                if (nomor < parseFloat(data.length) - 1 && salah < 5) {
+                                    let tmpSudah = sudah;
+                                    tmpSudah.push(data[nomor].id);
+                                    setSudah(tmpSudah);
+                                    storeData(kode, tmpSudah);
+                                    setNomor(nomor + 1);
+                                } else {
+                                    sendServer();
+                                    setModal3(true);
+                                    let tmpSudah = sudah;
+                                    tmpSudah.push(data[nomor].id);
+                                    setSudah(tmpSudah);
+                                    storeData(kode, tmpSudah);
+                                }
+                            }, 1000)
 
                         }}
 
@@ -931,7 +913,9 @@ export default function SoalTaskWaktu({ navigation, route }) {
                             flexDirection: 'row',
                             marginVertical: 5,
                             position: 'relative',
-                            backgroundColor: pilih[nomor].c ? colors.primary : colors.secondary,
+                            backgroundColor: pilih[nomor].c && data[nomor].jawaban !== data[nomor].c ? colors.danger : colors.secondary,
+                            borderWidth: openjawaban && data[nomor].jawaban == data[nomor].c ? 5 : 0,
+                            borderColor: openjawaban && data[nomor].jawaban == data[nomor].c ? colors.success : colors.white,
                             padding: 20,
                             borderRadius: 10,
                             justifyContent: 'center',
@@ -947,14 +931,21 @@ export default function SoalTaskWaktu({ navigation, route }) {
                     <TouchableOpacity
 
                         onPress={() => {
-
+                            setOpenJawaban(true);
                             if (!pilih[nomor].d) {
                                 pilih[nomor] = { b: false, c: false, a: false, d: true };
                                 setPilih([...pilih])
                                 if (data[nomor].jawaban == data[nomor].d && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
+                                    SoundPlayer.playSoundFile('success', 'mp3')
                                     skor[nomor] = 1;
+                                } else if (data[nomor].jawaban != data[nomor].d && !betul[nomor]) {
+                                    betul[nomor] = true;
+                                    setBetul([...betul])
+                                    setSalah(salah + 1)
+                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].d && betul[nomor]) {
                                     betul[nomor] = false;
                                     setBetul([...betul])
@@ -975,13 +966,32 @@ export default function SoalTaskWaktu({ navigation, route }) {
 
                             }
 
+                            setTimeout(() => {
+                                if (nomor < parseFloat(data.length) - 1 && salah < 5) {
+                                    let tmpSudah = sudah;
+                                    tmpSudah.push(data[nomor].id);
+                                    setSudah(tmpSudah);
+                                    storeData(kode, tmpSudah);
+                                    setNomor(nomor + 1);
+                                } else {
+                                    sendServer();
+                                    setModal3(true);
+                                    let tmpSudah = sudah;
+                                    tmpSudah.push(data[nomor].id);
+                                    setSudah(tmpSudah);
+                                    storeData(kode, tmpSudah);
+                                }
+                            }, 1000)
+
                         }}
 
                         style={{
                             flexDirection: 'row',
                             marginVertical: 5,
                             position: 'relative',
-                            backgroundColor: pilih[nomor].d ? colors.primary : colors.secondary,
+                            backgroundColor: pilih[nomor].d && data[nomor].jawaban !== data[nomor].d ? colors.danger : colors.secondary,
+                            borderWidth: openjawaban && data[nomor].jawaban == data[nomor].d ? 5 : 0,
+                            borderColor: openjawaban && data[nomor].jawaban == data[nomor].d ? colors.success : colors.white,
                             padding: 20,
                             borderRadius: 10,
                             justifyContent: 'center',
@@ -993,6 +1003,8 @@ export default function SoalTaskWaktu({ navigation, route }) {
                             color: colors.white
                         }}>{data[nomor].d}</Text>
                     </TouchableOpacity>
+
+
                     <TouchableOpacity onPress={sendServer} style={{
 
                         padding: 20,
