@@ -41,6 +41,23 @@ export default function SoalTask({ navigation, route }) {
 
         getData('user').then(u => {
             setUser(u);
+            axios.post(apiURL + 'soal_tersimpan', {
+                level: item.level,
+                fid_user: u.id,
+                halaman: route.params.halaman,
+            }).then(res => {
+                console.log('soal tersimpan', res.data);
+                res.data.map(i => {
+
+                    if (!soalTersimpan.includes(i.id)) {
+                        soalTersimpan.push(i.id)
+                    }
+
+
+                })
+                console.log(soalTersimpan)
+            });
+
         });
 
         getData(kode).then(ok => {
@@ -53,14 +70,12 @@ export default function SoalTask({ navigation, route }) {
                 tmp = ok;
             };
 
-            console.log('yang sudah', tmp);
-
             axios.post(apiURL + 'soal', {
                 level: item.level,
                 halaman: route.params.halaman,
                 sudah: tmp
             }).then(res => {
-                console.log(res.data);
+
 
                 if (res.data.length > 0) {
                     res.data.map(i => {
@@ -130,11 +145,16 @@ export default function SoalTask({ navigation, route }) {
 
 
 
+
+
         if (isFocus) {
             __getTransaction();
         }
         return () => backHandler.remove();
     }, [isFocus]);
+
+    const [openjawaban, setOpenJawaban] = useState(false);
+    const [soalTersimpan, setSoalTersimpan] = useState([]);
 
 
     const [NILAI, setNILAI] = useState(0);
@@ -613,7 +633,7 @@ export default function SoalTask({ navigation, route }) {
                 </TouchableOpacity>
 
 
-                {(pilih[nomor].a || pilih[nomor].b || pilih[nomor].c || pilih[nomor].d || data[nomor].tersimpan > 0) &&
+                {!soalTersimpan.includes(data[nomor].id || pilih[nomor].a || pilih[nomor].b || pilih[nomor].c || pilih[nomor].d || data[nomor].tersimpan > 0) &&
                     <View style={{
                         flex: 1,
                         alignItems: 'center'
@@ -629,7 +649,10 @@ export default function SoalTask({ navigation, route }) {
                             console.log(kirim);
                             axios.post(apiURL + 'save_soal', kirim).then(res => {
                                 console.log(res.data);
-                                Alert.alert(MYAPP, 'Soal berhasil di simpan !');
+
+                                Alert.alert(MYAPP, 'Soal berhasil di save !');
+                                setSoalTersimpan(res.data)
+
 
                             })
                         }} style={{
@@ -645,14 +668,73 @@ export default function SoalTask({ navigation, route }) {
                                 left: 5,
                                 fontFamily: fonts.secondary[800],
                                 fontSize: 15
-                            }}>Simpan</Text>
+                            }}>Save</Text>
+                        </TouchableOpacity>
+
+                    </View>
+                }
+
+                {soalTersimpan.includes(data[nomor].id) &&
+
+                    <View style={{
+                        flex: 1,
+                        alignItems: 'center'
+                    }}>
+                        <TouchableOpacity onPress={() => {
+                            const kirim = {
+                                level: item.level,
+                                fid_user: user.id,
+                                fid_soal: data[nomor].id,
+                                halaman: data[nomor].halaman
+                            }
+
+                            console.log(kirim);
+                            axios.post(apiURL + 'unsave_soal', kirim).then(res => {
+                                console.log(res.data);
+                                Alert.alert(MYAPP, 'Soal berhasil di unsave !');
+                                setSoalTersimpan(res.data)
+                                // let tmpSoal = soalTersimpan.filter(i => i.indexOf(data[nomor].id) > -1);
+                                // setSoalTersimpan(tmpSoal)
+
+                            })
+                        }} style={{
+                            backgroundColor: colors.white,
+                            borderRadius: 25,
+                            paddingVertical: 5,
+                            paddingHorizontal: 25,
+                            flexDirection: 'row',
+                            alignItems: 'center'
+
+                        }}><Icon type='ionicon' name='trash' color={colors.danger} size={30} />
+                            <Text style={{
+                                left: 5,
+                                fontFamily: fonts.secondary[800],
+                                fontSize: 15
+                            }}>Unsave</Text>
                         </TouchableOpacity>
 
                     </View>
                 }
 
 
-                {(pilih[nomor].a || pilih[nomor].b || pilih[nomor].c || pilih[nomor].d) && <TouchableOpacity onPress={() => setModal2(true)} style={{
+                {(pilih[nomor].a || pilih[nomor].b || pilih[nomor].c || pilih[nomor].d) && <TouchableOpacity onPress={() => {
+                    setOpenJawaban(false)
+                    if (nomor < parseFloat(data.length) - 1) {
+                        let tmpSudah = sudah;
+                        tmpSudah.push(data[nomor].id);
+                        setSudah(tmpSudah);
+                        storeData(kode, tmpSudah);
+                        setNomor(nomor + 1);
+                    } else {
+                        sendServer();
+                        setModal3(true);
+                        let tmpSudah = sudah;
+                        tmpSudah.push(data[nomor].id);
+                        setSudah(tmpSudah);
+                        storeData(kode, tmpSudah);
+                    }
+
+                }} style={{
                     padding: 2,
                 }}>
                     <Icon type='ionicon' name='arrow-forward-circle' color={colors.white} size={50} />
@@ -685,12 +767,12 @@ export default function SoalTask({ navigation, route }) {
                 }}>
                     <Text style={{
                         fontFamily: fonts.primary.normal,
-                        fontSize: 40,
+                        fontSize: 30,
                         color: colors.white
                     }}>{data[nomor].hiragana}</Text>
                     <Text style={{
                         fontFamily: fonts.primary.normal,
-                        fontSize: 60,
+                        fontSize: 30,
                         color: colors.white,
                         marginTop: 10,
                     }}>{data[nomor].kanji}</Text>
@@ -702,22 +784,32 @@ export default function SoalTask({ navigation, route }) {
                 }}>
                     <TouchableOpacity
                         onPress={() => {
+                            setOpenJawaban(true);
                             if (!pilih[nomor].a) {
+
                                 pilih[nomor] = { b: false, c: false, d: false, a: true };
                                 setPilih([...pilih])
 
                                 if (data[nomor].jawaban == data[nomor].a && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
+                                    SoundPlayer.playSoundFile('success', 'mp3')
                                     skor[nomor] = 1;
+                                } else if (data[nomor].jawaban != data[nomor].a && !betul[nomor]) {
+                                    betul[nomor] = true;
+                                    setBetul([...betul])
+                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].a && betul[nomor]) {
                                     betul[nomor] = false;
                                     setBetul([...betul])
                                     skor[nomor] = skor[nomor] - 1;
+
                                 } else if (data[nomor].jawaban !== data[nomor].a && betul[nomor]) {
                                     betul[nomor] = false;
                                     setBetul([...betul])
                                     skor[nomor] = skor[nomor] - 1;
+
                                 }
                             } else {
                                 pilih[nomor] = { ...pilih[nomor], a: false };
@@ -726,6 +818,7 @@ export default function SoalTask({ navigation, route }) {
                                     betul[nomor] = false;
                                     setBetul([...betul])
                                     skor[nomor] = skor[0] - 1;
+
                                 }
 
                             }
@@ -735,9 +828,11 @@ export default function SoalTask({ navigation, route }) {
                             flexDirection: 'row',
                             marginVertical: 5,
                             position: 'relative',
-                            backgroundColor: pilih[nomor].a ? colors.primary : colors.secondary,
+                            backgroundColor: pilih[nomor].a && data[nomor].jawaban !== data[nomor].a ? colors.danger : colors.secondary,
                             padding: 20,
                             borderRadius: 10,
+                            borderWidth: openjawaban && data[nomor].jawaban == data[nomor].a ? 5 : 0,
+                            borderColor: openjawaban && data[nomor].jawaban == data[nomor].a ? colors.success : colors.white,
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
@@ -752,14 +847,20 @@ export default function SoalTask({ navigation, route }) {
                     <TouchableOpacity
 
                         onPress={() => {
+                            setOpenJawaban(true);
                             if (!pilih[nomor].b) {
                                 pilih[nomor] = { a: false, c: false, d: false, b: true };
                                 setPilih([...pilih])
                                 if (data[nomor].jawaban == data[nomor].b && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-
+                                    SoundPlayer.playSoundFile('success', 'mp3')
                                     skor[nomor] = 1;
+                                } else if (data[nomor].jawaban != data[nomor].b && !betul[nomor]) {
+                                    betul[nomor] = true;
+                                    setBetul([...betul])
+                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].b && betul[nomor]) {
                                     betul[nomor] = false;
                                     setBetul([...betul])
@@ -786,7 +887,9 @@ export default function SoalTask({ navigation, route }) {
                             flexDirection: 'row',
                             marginVertical: 5,
                             position: 'relative',
-                            backgroundColor: pilih[nomor].b ? colors.primary : colors.secondary,
+                            backgroundColor: pilih[nomor].b && data[nomor].jawaban !== data[nomor].b ? colors.danger : colors.secondary,
+                            borderWidth: openjawaban && data[nomor].jawaban == data[nomor].b ? 5 : 0,
+                            borderColor: openjawaban && data[nomor].jawaban == data[nomor].b ? colors.success : colors.white,
                             padding: 20,
                             borderRadius: 10,
                             justifyContent: 'center',
@@ -802,14 +905,20 @@ export default function SoalTask({ navigation, route }) {
                     <TouchableOpacity
 
                         onPress={() => {
-
+                            setOpenJawaban(true);
                             if (!pilih[nomor].c) {
                                 pilih[nomor] = { b: false, a: false, d: false, c: true };
                                 setPilih([...pilih])
                                 if (data[nomor].jawaban == data[nomor].c && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
+                                    SoundPlayer.playSoundFile('success', 'mp3')
                                     skor[nomor] = 1;
+                                } else if (data[nomor].jawaban != data[nomor].c && !betul[nomor]) {
+                                    betul[nomor] = true;
+                                    setBetul([...betul])
+                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].c && betul[nomor]) {
                                     betul[nomor] = false;
                                     setBetul([...betul])
@@ -836,7 +945,9 @@ export default function SoalTask({ navigation, route }) {
                             flexDirection: 'row',
                             marginVertical: 5,
                             position: 'relative',
-                            backgroundColor: pilih[nomor].c ? colors.primary : colors.secondary,
+                            backgroundColor: pilih[nomor].c && data[nomor].jawaban !== data[nomor].c ? colors.danger : colors.secondary,
+                            borderWidth: openjawaban && data[nomor].jawaban == data[nomor].c ? 5 : 0,
+                            borderColor: openjawaban && data[nomor].jawaban == data[nomor].c ? colors.success : colors.white,
                             padding: 20,
                             borderRadius: 10,
                             justifyContent: 'center',
@@ -852,14 +963,20 @@ export default function SoalTask({ navigation, route }) {
                     <TouchableOpacity
 
                         onPress={() => {
-
+                            setOpenJawaban(true);
                             if (!pilih[nomor].d) {
                                 pilih[nomor] = { b: false, c: false, a: false, d: true };
                                 setPilih([...pilih])
                                 if (data[nomor].jawaban == data[nomor].d && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
+                                    SoundPlayer.playSoundFile('success', 'mp3')
                                     skor[nomor] = 1;
+                                } else if (data[nomor].jawaban != data[nomor].d && !betul[nomor]) {
+                                    betul[nomor] = true;
+                                    setBetul([...betul])
+                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].d && betul[nomor]) {
                                     betul[nomor] = false;
                                     setBetul([...betul])
@@ -886,7 +1003,9 @@ export default function SoalTask({ navigation, route }) {
                             flexDirection: 'row',
                             marginVertical: 5,
                             position: 'relative',
-                            backgroundColor: pilih[nomor].d ? colors.primary : colors.secondary,
+                            backgroundColor: pilih[nomor].d && data[nomor].jawaban !== data[nomor].d ? colors.danger : colors.secondary,
+                            borderWidth: openjawaban && data[nomor].jawaban == data[nomor].d ? 5 : 0,
+                            borderColor: openjawaban && data[nomor].jawaban == data[nomor].d ? colors.success : colors.white,
                             padding: 20,
                             borderRadius: 10,
                             justifyContent: 'center',

@@ -172,8 +172,8 @@ export default function Register({ navigation }) {
 
                 <MyGap jarak={10} />
                 <MyInput
-                    placeholder="Masukan telepon"
-                    label="Telepon"
+                    placeholder="Masukan telepon / Email"
+                    label="Telepon / Email"
                     iconname="call"
                     keyboardType="phone-pad"
                     value={data.telepon}
@@ -187,8 +187,8 @@ export default function Register({ navigation }) {
 
                 <MyGap jarak={10} />
                 <MyInput
-                    placeholder="Masukan alamat"
-                    label="Alamat"
+                    placeholder="Masukan kota tinggal"
+                    label="Kota Tinggal"
                     iconname="location"
                     value={data.alamat}
                     onChangeText={value =>

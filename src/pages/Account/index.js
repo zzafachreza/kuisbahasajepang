@@ -185,8 +185,8 @@ export default function ({ navigation, route }) {
                         </View>
                         <View style={{ padding: 10, }}>
                             <MyList label="Username" value={user.username} />
-                            <MyList label="Nomor Handphone" value={user.telepon} />
-                            <MyList label="Alamat" value={user.alamat} />
+                            <MyList label="Telepon / Email" value={user.telepon} />
+                            <MyList label="Kota TInggal" value={user.alamat} />
 
 
                         </View>
