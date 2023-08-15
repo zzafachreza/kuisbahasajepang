@@ -15,6 +15,7 @@ import MyCarouser from '../../components/MyCarouser';
 
 const ListTombol = ({ onPress, label, level }) => {
 
+
   return (
     <TouchableOpacity onPress={onPress} style={{
       backgroundColor: level > 0 ? colors.secondary : colors.black,
@@ -165,8 +166,19 @@ export default function Home({ navigation, route }) {
           <ListTombol level={DATALEVEL.BASIC} label="N5" onPress={() => {
             DATALEVEL.BASIC == 0 ? Alert.alert(MYAPP, 'Level BASIC belum selesai !') : navigation.navigate('SoalN5Pilihan')
           }} />
-          <ListTombol level={DATALEVEL.N5} label="N4" onPress={() => {
-            DATALEVEL.N5 == 0 ? Alert.alert(MYAPP, 'Level N5 belum selesai !') : navigation.navigate('SoalN4Pilihan')
+          <ListTombol level={DATALEVEL.N4} label="N4" onPress={() => {
+            DATALEVEL.N4 == 0 ? Alert.alert(MYAPP, 'Silahkan Hubungi Admin', [
+              { text: 'NANTI' },
+              {
+                text: 'WHATSAPP',
+                onPress: () => {
+                  let text = `Hallo admin saya username *${user.username}* ingin menggunakan level N4`;
+                  console.log(text)
+                  Linking.openURL('https://wa.me/' + comp.tlp + '?text=' + text);
+
+                }
+              }
+            ]) : navigation.navigate('SoalN4Pilihan')
           }} />
           <ListTombol level={0} label="N3" />
           <ListTombol level={0} label="N2" />

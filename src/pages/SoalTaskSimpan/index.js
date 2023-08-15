@@ -154,7 +154,7 @@ export default function SoalTaskSimpan({ navigation, route }) {
         } else if (nilai >= 70 && nilai < 80) {
             setNilaiIndex('Homeru kotoba shikanai desune, senpai hebat');
         } else if (nilai >= 80) {
-            setNilaiIndex('Sasuga senpai, tauorareru hitu desune, Selamat senpai hebat');
+            setNilaiIndex('Sasuga senpai, tayorareru hitu desune, Selamat senpai hebat');
         }
         setNILAI(nilai);
 
@@ -560,14 +560,14 @@ export default function SoalTaskSimpan({ navigation, route }) {
                 flexDirection: 'row',
                 backgroundColor: colors.secondary,
                 padding: 5,
-                height: 80,
+                height: 50,
                 alignItems: 'center'
             }}>
                 <Text style={{
                     flex: 1,
                     textAlign: 'center',
                     fontFamily: fonts.secondary[800],
-                    fontSize: 30,
+                    fontSize: 25,
                     color: colors.white
                 }}>{item.level}</Text>
 

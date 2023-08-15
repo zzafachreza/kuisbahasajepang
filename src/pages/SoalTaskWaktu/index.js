@@ -103,7 +103,8 @@ export default function SoalTaskWaktu({ navigation, route }) {
 
     const sendWaktuHabis = () => {
         setModal2(true);
-        setWaktu(10);
+        setWaktu(30);
+
     }
 
 
@@ -146,7 +147,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
         let totalNilai = skor.reduce((a, b) => a + b, 0);
 
 
-        let nilai = (totalNilai / data.length) * 100;
+        let nilai = Math.round((totalNilai / data.length) * 100, 2);
 
         console.log(nilai);
 
@@ -159,7 +160,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
         } else if (nilai >= 70 && nilai < 80) {
             setNilaiIndex('Homeru kotoba shikanai desune, senpai hebat');
         } else if (nilai >= 80) {
-            setNilaiIndex('Sasuga senpai, tauorareru hitu desune, Selamat senpai hebat');
+            setNilaiIndex('Sasuga senpai, tayorareru hitu desune, Selamat senpai hebat');
         }
         setNILAI(nilai);
 
@@ -565,21 +566,21 @@ export default function SoalTaskWaktu({ navigation, route }) {
                 flexDirection: 'row',
                 backgroundColor: colors.secondary,
                 padding: 5,
-                height: 80,
+                height: 50,
                 alignItems: 'center'
             }}>
                 <Text style={{
                     flex: 1,
                     textAlign: 'center',
                     fontFamily: fonts.secondary[800],
-                    fontSize: 30,
+                    fontSize: 25,
                     color: colors.white
                 }}>{item.level}</Text>
                 <Text style={{
                     flex: 1,
                     textAlign: 'center',
                     fontFamily: fonts.secondary[800],
-                    fontSize: 30,
+                    fontSize: 25,
                     color: colors.white
                 }}>{1 + nomor} - {data.length}</Text>
 
@@ -738,12 +739,14 @@ export default function SoalTaskWaktu({ navigation, route }) {
                             }
 
                             setTimeout(() => {
+                                setOpenJawaban(false);
                                 if (nomor < parseFloat(data.length) - 1 && salah < 5) {
                                     let tmpSudah = sudah;
                                     tmpSudah.push(data[nomor].id);
                                     setSudah(tmpSudah);
                                     storeData(kode, tmpSudah);
                                     setNomor(nomor + 1);
+
                                 } else {
                                     sendServer();
                                     setModal3(true);
@@ -816,6 +819,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                             }
 
                             setTimeout(() => {
+                                setOpenJawaban(false);
                                 if (nomor < parseFloat(data.length) - 1 && salah < 5) {
                                     let tmpSudah = sudah;
                                     tmpSudah.push(data[nomor].id);
@@ -891,6 +895,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
 
                             }
                             setTimeout(() => {
+                                setOpenJawaban(false);
                                 if (nomor < parseFloat(data.length) - 1 && salah < 5) {
                                     let tmpSudah = sudah;
                                     tmpSudah.push(data[nomor].id);
@@ -967,6 +972,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                             }
 
                             setTimeout(() => {
+                                setOpenJawaban(false);
                                 if (nomor < parseFloat(data.length) - 1 && salah < 5) {
                                     let tmpSudah = sudah;
                                     tmpSudah.push(data[nomor].id);

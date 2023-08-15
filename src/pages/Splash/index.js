@@ -39,15 +39,9 @@ export default function Splash({ navigation }) {
       alignItems: 'center'
     }}>
 
-      <Text style={{
-        fontFamily: fonts.secondary[800],
-        color: colors.secondary,
-        fontSize: 50,
-        marginBottom: 10,
-      }}>MR. Y</Text>
       <Image source={require('../../assets/logo.png')} style={{
         width: windowWidth,
-        height: windowWidth / 2,
+        height: windowWidth,
         resizeMode: 'contain'
       }} />
 
