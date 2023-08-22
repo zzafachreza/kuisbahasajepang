@@ -23,7 +23,7 @@ const ListTombol = ({ onPress, label }) => {
         }}>
             <Text style={{
                 fontFamily: fonts.secondary[600],
-                fontSize: 20,
+                fontSize: 16,
                 color: colors.white
             }}>{label}</Text>
         </TouchableOpacity>
@@ -70,13 +70,24 @@ export default function SoalN4Pilihan({ navigation, route }) {
 
     const [SOALTERSIMPAN, SETSOALTERSIMPAN] = useState(0)
 
+    const [jumlah, setJumlah] = useState(0);
 
+    const __getJumlahSoal = () => {
+        console.log('cek')
+        axios.post(apiURL + 'get_jumlah_soal', {
+            level: THELEVEL
+        }).then(res => {
+            console.log(res.data);
+            setJumlah(res.data)
+        })
+    }
     const isFocus = useIsFocused();
     useEffect(() => {
 
         if (isFocus) {
             __getSoalTersimpan();
             __getRangking();
+            __getJumlahSoal();
             getData('user').then(uu => {
                 setUser(uu);
             })
@@ -167,10 +178,11 @@ export default function SoalN4Pilihan({ navigation, route }) {
                         flex: 1,
                         paddingRight: 5,
                     }}>
-                        <ListTombol label="CHECK LIST" onPress={() => navigation.navigate('SoalTaskSimpan', {
+                        <ListTombol label="TERSIMPAN" onPress={() => navigation.navigate('SoalTaskSimpan', {
                             level: THELEVEL,
-                            JUMLAH_SOAL: JUMLAH_LEVEL,
-                            JUMLAH_LEVEL: JUMLAH_LEVEL
+                            awal: 0,
+                            akhir: jumlah,
+                            halaman: 0
                         })} />
                     </View>
                     <View style={{

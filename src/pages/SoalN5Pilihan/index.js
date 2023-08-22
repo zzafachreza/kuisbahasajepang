@@ -23,7 +23,7 @@ const ListTombol = ({ onPress, label }) => {
         }}>
             <Text style={{
                 fontFamily: fonts.secondary[600],
-                fontSize: 20,
+                fontSize: 16,
                 color: colors.white
             }}>{label}</Text>
         </TouchableOpacity>
@@ -72,10 +72,24 @@ export default function SoalN5Pilihan({ navigation, route }) {
 
 
     const isFocus = useIsFocused();
+
+    const [jumlah, setJumlah] = useState(0);
+
+    const __getJumlahSoal = () => {
+        console.log('cek')
+        axios.post(apiURL + 'get_jumlah_soal', {
+            level: THELEVEL
+        }).then(res => {
+            console.log(res.data);
+            setJumlah(res.data)
+        })
+    }
+
     useEffect(() => {
 
         if (isFocus) {
             __getSoalTersimpan();
+            __getJumlahSoal();
             __getRangking();
             getData('user').then(uu => {
                 setUser(uu);
@@ -167,10 +181,11 @@ export default function SoalN5Pilihan({ navigation, route }) {
                         flex: 1,
                         paddingRight: 5,
                     }}>
-                        <ListTombol label="CHECK LIST" onPress={() => navigation.navigate('SoalTaskSimpan', {
+                        <ListTombol label="TERSIMPAN" onPress={() => navigation.navigate('SoalTaskSimpan', {
                             level: THELEVEL,
-                            JUMLAH_SOAL: JUMLAH_LEVEL,
-                            JUMLAH_LEVEL: JUMLAH_LEVEL
+                            awal: 0,
+                            akhir: jumlah,
+                            halaman: 0
                         })} />
                     </View>
                     <View style={{
@@ -213,7 +228,7 @@ export default function SoalN5Pilihan({ navigation, route }) {
                                     fontSize: 15,
                                     color: colors.secondary,
                                     textAlign: 'center'
-                                }}>{rank[1].nama_lengkap}</Text>
+                                }}>{rank[1].nama_lengkap.replace(rank[1].nama_lengkap.substring(2, rank[1].nama_lengkap.length - 2), '***')}</Text>
                                 <Text style={{
                                     fontFamily: fonts.secondary[800],
                                     fontSize: 15
@@ -243,7 +258,7 @@ export default function SoalN5Pilihan({ navigation, route }) {
                                     fontSize: 15,
                                     color: colors.secondary,
                                     textAlign: 'center'
-                                }}>{rank[0].nama_lengkap}</Text>
+                                }}>{rank[0].nama_lengkap.replace(rank[0].nama_lengkap.substring(2, rank[0].nama_lengkap.length - 2), '***')}</Text>
                                 <Text style={{
                                     fontFamily: fonts.secondary[800],
                                     fontSize: 15
@@ -275,7 +290,7 @@ export default function SoalN5Pilihan({ navigation, route }) {
                                     fontSize: 15,
                                     color: colors.secondary,
                                     textAlign: 'center'
-                                }}>{rank[2].nama_lengkap}</Text>
+                                }}>{rank[2].nama_lengkap.replace(rank[2].nama_lengkap.substring(2, rank[2].nama_lengkap.length - 2), '***')}</Text>
                                 <Text style={{
                                     fontFamily: fonts.secondary[800],
                                     fontSize: 15

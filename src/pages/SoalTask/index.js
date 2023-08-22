@@ -14,6 +14,7 @@ import 'moment/locale/id';
 import SoundPlayer from 'react-native-sound-player'
 import ViewShot from "react-native-view-shot";
 import Share from 'react-native-share';
+import { showMessage } from 'react-native-flash-message';
 
 export default function SoalTask({ navigation, route }) {
 
@@ -201,7 +202,7 @@ export default function SoalTask({ navigation, route }) {
     return (
         <SafeAreaView style={{
             flex: 1,
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
             position: 'relative'
 
         }}>
@@ -255,7 +256,7 @@ export default function SoalTask({ navigation, route }) {
                                 borderColor: colors.primary
                             }}>
                                 <Text style={{
-                                    fontSize: 20,
+                                    fontSize: 13,
                                     fontFamily: fonts.secondary[600],
                                     color: colors.white,
                                     textAlign: 'center'
@@ -278,7 +279,7 @@ export default function SoalTask({ navigation, route }) {
                                 borderColor: colors.primary
                             }}>
                                 <Text style={{
-                                    fontSize: 20,
+                                    fontSize: 13,
                                     fontFamily: fonts.secondary[600],
                                     color: colors.white,
                                     textAlign: 'center'
@@ -377,7 +378,7 @@ export default function SoalTask({ navigation, route }) {
                                 borderColor: colors.primary
                             }}>
                                 <Text style={{
-                                    fontSize: 20,
+                                    fontSize: 13,
                                     fontFamily: fonts.secondary[600],
                                     color: colors.white,
                                     textAlign: 'center'
@@ -431,7 +432,7 @@ export default function SoalTask({ navigation, route }) {
                                 borderColor: colors.primary
                             }}>
                                 <Text style={{
-                                    fontSize: 20,
+                                    fontSize: 13,
                                     fontFamily: fonts.secondary[600],
                                     color: colors.white,
                                     textAlign: 'center'
@@ -478,7 +479,7 @@ export default function SoalTask({ navigation, route }) {
                             <Text style={{
                                 fontFamily: fonts.secondary[600],
                                 color: colors.white,
-                                fontSize: 20,
+                                fontSize: 13,
                             }}>Nilai</Text>
                             <Text style={{
                                 fontFamily: fonts.secondary[800],
@@ -492,7 +493,7 @@ export default function SoalTask({ navigation, route }) {
                             marginVertical: 20,
                             fontFamily: fonts.secondary[800],
                             color: colors.black,
-                            fontSize: 20,
+                            fontSize: 13,
                         }}>{nilaiIndex}</Text>
 
                         <Image source={require('../../assets/logo.png')} style={{
@@ -525,7 +526,7 @@ export default function SoalTask({ navigation, route }) {
                             borderColor: colors.primary
                         }}>
                             <Text style={{
-                                fontSize: 20,
+                                fontSize: 13,
                                 fontFamily: fonts.secondary[600],
                                 color: colors.white,
                                 textAlign: 'center'
@@ -541,11 +542,13 @@ export default function SoalTask({ navigation, route }) {
                             paddingRight: 5,
                         }}>
                             <TouchableOpacity onPress={() => {
-                                navigation.reset({
-                                    index: 0,
-                                    routes: [{ name: 'Splash' }],
-                                });
-                                storeData(kode, []);
+                                // navigation.reset({
+                                //     index: 0,
+                                //     routes: [{ name: 'Splash' }],
+                                // });
+                                setModal3(false)
+
+                                // storeData(kode, []);
                             }} style={{
                                 backgroundColor: colors.secondary,
                                 padding: 10,
@@ -554,7 +557,7 @@ export default function SoalTask({ navigation, route }) {
                                 borderColor: colors.primary
                             }}>
                                 <Text style={{
-                                    fontSize: 20,
+                                    fontSize: 13,
                                     fontFamily: fonts.secondary[600],
                                     color: colors.white,
                                     textAlign: 'center'
@@ -578,7 +581,7 @@ export default function SoalTask({ navigation, route }) {
                                 borderColor: colors.primary
                             }}>
                                 <Text style={{
-                                    fontSize: 20,
+                                    fontSize: 13,
                                     fontFamily: fonts.secondary[600],
                                     color: colors.white,
                                     textAlign: 'center'
@@ -629,7 +632,7 @@ export default function SoalTask({ navigation, route }) {
                 <TouchableOpacity onPress={() => setModal1(true)} style={{
                     padding: 2,
                 }}>
-                    <Icon type='ionicon' name='arrow-back-circle' color={colors.white} size={50} />
+                    <Icon type='ionicon' name='arrow-back-circle' color={colors.primary} size={50} />
                 </TouchableOpacity>
 
 
@@ -650,7 +653,10 @@ export default function SoalTask({ navigation, route }) {
                             axios.post(apiURL + 'save_soal', kirim).then(res => {
                                 console.log(res.data);
 
-                                Alert.alert(MYAPP, 'Soal berhasil di save !');
+                                showMessage({
+                                    type: 'success',
+                                    message: 'Soal berhasil di save !'
+                                })
                                 setSoalTersimpan(res.data)
 
 
@@ -691,7 +697,10 @@ export default function SoalTask({ navigation, route }) {
                             console.log(kirim);
                             axios.post(apiURL + 'unsave_soal', kirim).then(res => {
                                 console.log(res.data);
-                                Alert.alert(MYAPP, 'Soal berhasil di unsave !');
+                                showMessage({
+                                    type: 'success',
+                                    message: 'Soal berhasil di unsave !'
+                                })
                                 setSoalTersimpan(res.data)
                                 // let tmpSoal = soalTersimpan.filter(i => i.indexOf(data[nomor].id) > -1);
                                 // setSoalTersimpan(tmpSoal)
@@ -737,7 +746,7 @@ export default function SoalTask({ navigation, route }) {
                 }} style={{
                     padding: 2,
                 }}>
-                    <Icon type='ionicon' name='arrow-forward-circle' color={colors.white} size={50} />
+                    <Icon type='ionicon' name='arrow-forward-circle' color={colors.primary} size={50} />
                 </TouchableOpacity>}
 
             </View>}
@@ -761,19 +770,18 @@ export default function SoalTask({ navigation, route }) {
                     justifyContent: 'center',
                     alignItems: 'center',
                     padding: 10,
-                    backgroundColor: colors.secondary,
-                    margin: 20,
+                    marginVertical: 10,
                     borderRadius: 20,
                 }}>
                     <Text style={{
                         fontFamily: fonts.primary.normal,
-                        fontSize: 30,
-                        color: colors.white
+                        fontSize: 25,
+                        color: colors.black
                     }}>{data[nomor].hiragana}</Text>
                     <Text style={{
                         fontFamily: fonts.primary.normal,
-                        fontSize: 30,
-                        color: colors.white,
+                        fontSize: 25,
+                        color: colors.black,
                         marginTop: 10,
                     }}>{data[nomor].kanji}</Text>
                 </View>
@@ -838,7 +846,7 @@ export default function SoalTask({ navigation, route }) {
                         }}>
                         <Text style={{
                             fontFamily: fonts.secondary[600],
-                            fontSize: 20,
+                            fontSize: 13,
                             color: colors.white
                         }}>{data[nomor].a}</Text>
 
@@ -897,7 +905,7 @@ export default function SoalTask({ navigation, route }) {
                         }}>
                         <Text style={{
                             fontFamily: fonts.secondary[600],
-                            fontSize: 20,
+                            fontSize: 13,
                             color: colors.white
                         }}>{data[nomor].b}</Text>
                     </TouchableOpacity>
@@ -955,7 +963,7 @@ export default function SoalTask({ navigation, route }) {
                         }}>
                         <Text style={{
                             fontFamily: fonts.secondary[600],
-                            fontSize: 20,
+                            fontSize: 13,
                             color: colors.white
                         }}>{data[nomor].c}</Text>
                     </TouchableOpacity>
@@ -1013,7 +1021,7 @@ export default function SoalTask({ navigation, route }) {
                         }}>
                         <Text style={{
                             fontFamily: fonts.secondary[600],
-                            fontSize: 20,
+                            fontSize: 13,
                             color: colors.white
                         }}>{data[nomor].d}</Text>
                     </TouchableOpacity>
@@ -1024,11 +1032,11 @@ export default function SoalTask({ navigation, route }) {
                         justifyContent: 'center',
                         alignItems: 'center',
                         backgroundColor: colors.primary,
-                        marginTop: 20,
+                        marginTop: 10,
                     }}>
                         <Text style={{
                             fontFamily: fonts.secondary[600],
-                            fontSize: 20,
+                            fontSize: 13,
                             color: colors.white
                         }}>Nilai</Text>
                     </TouchableOpacity>
