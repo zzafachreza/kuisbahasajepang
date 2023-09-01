@@ -352,10 +352,10 @@ export default function SoalTaskSimpan({ navigation, route }) {
                                 if (user.suara == 1) {
                                     if (pilihan == data[nomor].jawaban) {
 
-                                        SoundPlayer.playSoundFile('success', 'mp3')
+                                        if (user.suara == 1) { SoundPlayer.playSoundFile('success', 'mp3') }
                                     } else {
 
-                                        SoundPlayer.playSoundFile('failed', 'mp3')
+                                        if (user.suara == 1) { SoundPlayer.playSoundFile('failed', 'mp3') }
                                     }
                                 }
 
@@ -803,12 +803,12 @@ export default function SoalTaskSimpan({ navigation, route }) {
                                 if (data[nomor].jawaban == data[nomor].a && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-                                    SoundPlayer.playSoundFile('success', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('success', 'mp3') }
                                     skor[nomor] = 1;
                                 } else if (data[nomor].jawaban != data[nomor].a && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('failed', 'mp3') }
                                     skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].a && betul[nomor]) {
                                     betul[nomor] = false;
@@ -864,12 +864,12 @@ export default function SoalTaskSimpan({ navigation, route }) {
                                 if (data[nomor].jawaban == data[nomor].b && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-                                    SoundPlayer.playSoundFile('success', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('success', 'mp3') }
                                     skor[nomor] = 1;
                                 } else if (data[nomor].jawaban != data[nomor].b && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('failed', 'mp3') }
                                     skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].b && betul[nomor]) {
                                     betul[nomor] = false;
@@ -922,12 +922,12 @@ export default function SoalTaskSimpan({ navigation, route }) {
                                 if (data[nomor].jawaban == data[nomor].c && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-                                    SoundPlayer.playSoundFile('success', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('success', 'mp3') }
                                     skor[nomor] = 1;
                                 } else if (data[nomor].jawaban != data[nomor].c && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('failed', 'mp3') }
                                     skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].c && betul[nomor]) {
                                     betul[nomor] = false;
@@ -980,12 +980,12 @@ export default function SoalTaskSimpan({ navigation, route }) {
                                 if (data[nomor].jawaban == data[nomor].d && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-                                    SoundPlayer.playSoundFile('success', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('success', 'mp3') }
                                     skor[nomor] = 1;
                                 } else if (data[nomor].jawaban != data[nomor].d && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('failed', 'mp3') }
                                     skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].d && betul[nomor]) {
                                     betul[nomor] = false;

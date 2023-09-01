@@ -83,7 +83,9 @@ export default function SoalTaskWaktu({ navigation, route }) {
                             text: 'COBA LAGI',
                             onPress: () => {
 
-                                navigation.goBack();
+                                setSudah([]);
+                                storeData(kode, []);
+                                setNomor(0);
                             }
                         }
                     ])
@@ -382,7 +384,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 if (user.suara == 1) {
                                     if (pilihan == data[nomor].jawaban) {
 
-                                        SoundPlayer.playSoundFile('success', 'mp3')
+                                        if (user.suara == 1) { SoundPlayer.playSoundFile('success', 'mp3') }
                                     } else {
 
                                         SoundPlayer.playSoundFile('failed', 'mp3')
@@ -514,11 +516,10 @@ export default function SoalTaskWaktu({ navigation, route }) {
                             paddingRight: 5,
                         }}>
                             <TouchableOpacity onPress={() => {
-                                navigation.reset({
-                                    index: 0,
-                                    routes: [{ name: 'Splash' }],
-                                });
+                                setModal3(false)
+                                setSudah([]);
                                 storeData(kode, []);
+                                setNomor(0);
                             }} style={{
                                 backgroundColor: colors.secondary,
                                 padding: 10,
@@ -707,13 +708,13 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 if (data[nomor].jawaban == data[nomor].a && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-                                    SoundPlayer.playSoundFile('success', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('success', 'mp3') }
                                     skor[nomor] = 1;
                                 } else if (data[nomor].jawaban != data[nomor].a && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
                                     setSalah(salah + 1)
-                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('failed', 'mp3') }
                                     skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].a && betul[nomor]) {
                                     betul[nomor] = false;
@@ -790,13 +791,13 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 if (data[nomor].jawaban == data[nomor].b && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-                                    SoundPlayer.playSoundFile('success', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('success', 'mp3') }
                                     skor[nomor] = 1;
                                 } else if (data[nomor].jawaban != data[nomor].b && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
                                     setSalah(salah + 1)
-                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('failed', 'mp3') }
                                     skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].b && betul[nomor]) {
                                     betul[nomor] = false;
@@ -867,13 +868,13 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 if (data[nomor].jawaban == data[nomor].c && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-                                    SoundPlayer.playSoundFile('success', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('success', 'mp3') }
                                     skor[nomor] = 1;
                                 } else if (data[nomor].jawaban != data[nomor].c && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
                                     setSalah(salah + 1)
-                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('failed', 'mp3') }
                                     skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].c && betul[nomor]) {
                                     betul[nomor] = false;
@@ -943,13 +944,13 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 if (data[nomor].jawaban == data[nomor].d && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
-                                    SoundPlayer.playSoundFile('success', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('success', 'mp3') }
                                     skor[nomor] = 1;
                                 } else if (data[nomor].jawaban != data[nomor].d && !betul[nomor]) {
                                     betul[nomor] = true;
                                     setBetul([...betul])
                                     setSalah(salah + 1)
-                                    SoundPlayer.playSoundFile('failed', 'mp3')
+                                    if (user.suara == 1) { SoundPlayer.playSoundFile('failed', 'mp3') }
                                     skor[nomor] = 0;
                                 } else if (data[nomor].jawaban == data[nomor].d && betul[nomor]) {
                                     betul[nomor] = false;
