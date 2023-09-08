@@ -175,7 +175,6 @@ export default function Register({ navigation }) {
                     placeholder="Masukan telepon / Email"
                     label="Telepon / Email"
                     iconname="call"
-
                     value={data.telepon}
                     onChangeText={value =>
                         setData({

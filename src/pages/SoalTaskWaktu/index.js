@@ -86,6 +86,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 setSudah([]);
                                 storeData(kode, []);
                                 setNomor(0);
+                                navigation.goBack();
                             }
                         }
                     ])
@@ -233,7 +234,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 borderColor: colors.primary
                             }}>
                                 <Text style={{
-                                    fontSize: 13,
+                                    fontSize: 15,
                                     fontFamily: fonts.secondary[600],
                                     color: colors.white,
                                     textAlign: 'center'
@@ -256,7 +257,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 borderColor: colors.primary
                             }}>
                                 <Text style={{
-                                    fontSize: 13,
+                                    fontSize: 15,
                                     fontFamily: fonts.secondary[600],
                                     color: colors.white,
                                     textAlign: 'center'
@@ -351,7 +352,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 borderColor: colors.primary
                             }}>
                                 <Text style={{
-                                    fontSize: 13,
+                                    fontSize: 15,
                                     fontFamily: fonts.secondary[600],
                                     color: colors.white,
                                     textAlign: 'center'
@@ -406,7 +407,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 borderColor: colors.primary
                             }}>
                                 <Text style={{
-                                    fontSize: 13,
+                                    fontSize: 15,
                                     fontFamily: fonts.secondary[600],
                                     color: colors.white,
                                     textAlign: 'center'
@@ -453,7 +454,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                             <Text style={{
                                 fontFamily: fonts.secondary[600],
                                 color: colors.white,
-                                fontSize: 13,
+                                fontSize: 15,
                             }}>Nilai</Text>
                             <Text style={{
                                 fontFamily: fonts.secondary[800],
@@ -467,7 +468,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                             marginVertical: 20,
                             fontFamily: fonts.secondary[800],
                             color: colors.black,
-                            fontSize: 13,
+                            fontSize: 15,
                         }}>{nilaiIndex}</Text>
 
                         <Image source={require('../../assets/logo.png')} style={{
@@ -500,7 +501,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                             borderColor: colors.primary
                         }}>
                             <Text style={{
-                                fontSize: 13,
+                                fontSize: 15,
                                 fontFamily: fonts.secondary[600],
                                 color: colors.white,
                                 textAlign: 'center'
@@ -520,6 +521,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 setSudah([]);
                                 storeData(kode, []);
                                 setNomor(0);
+                                navigation.goBack();
                             }} style={{
                                 backgroundColor: colors.secondary,
                                 padding: 10,
@@ -528,7 +530,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 borderColor: colors.primary
                             }}>
                                 <Text style={{
-                                    fontSize: 13,
+                                    fontSize: 15,
                                     fontFamily: fonts.secondary[600],
                                     color: colors.white,
                                     textAlign: 'center'
@@ -552,7 +554,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                                 borderColor: colors.primary
                             }}>
                                 <Text style={{
-                                    fontSize: 13,
+                                    fontSize: 15,
                                     fontFamily: fonts.secondary[600],
                                     color: colors.white,
                                     textAlign: 'center'
@@ -775,7 +777,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                         }}>
                         <Text style={{
                             fontFamily: fonts.secondary[600],
-                            fontSize: 13,
+                            fontSize: 15,
                             color: colors.white
                         }}>{data[nomor].a}</Text>
 
@@ -853,7 +855,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                         }}>
                         <Text style={{
                             fontFamily: fonts.secondary[600],
-                            fontSize: 13,
+                            fontSize: 15,
                             color: colors.white
                         }}>{data[nomor].b}</Text>
                     </TouchableOpacity>
@@ -929,7 +931,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                         }}>
                         <Text style={{
                             fontFamily: fonts.secondary[600],
-                            fontSize: 13,
+                            fontSize: 15,
                             color: colors.white
                         }}>{data[nomor].c}</Text>
                     </TouchableOpacity>
@@ -1006,7 +1008,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                         }}>
                         <Text style={{
                             fontFamily: fonts.secondary[600],
-                            fontSize: 13,
+                            fontSize: 15,
                             color: colors.white
                         }}>{data[nomor].d}</Text>
                     </TouchableOpacity>
@@ -1023,7 +1025,7 @@ export default function SoalTaskWaktu({ navigation, route }) {
                     }}>
                         <Text style={{
                             fontFamily: fonts.secondary[600],
-                            fontSize: 13,
+                            fontSize: 15,
                             color: colors.white
                         }}>Nilai</Text>
                     </TouchableOpacity>

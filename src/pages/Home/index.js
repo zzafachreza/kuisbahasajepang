@@ -45,6 +45,7 @@ export default function Home({ navigation, route }) {
   const [open, setOpen] = useState(false);
   const [comp, setComp] = useState({});
   const [DATALEVEL, SETDATALEVEL] = useState({});
+  const [langganan, setLangganan] = useState({});
 
   const _getTransaction = async () => {
 
@@ -55,7 +56,16 @@ export default function Home({ navigation, route }) {
       }).then(rr => {
         console.log(rr.data);
         SETDATALEVEL(rr.data);
+
+      })
+
+      axios.post(apiURL + 'cek_langganan', {
+        id: u.id
+      }).then(cek => {
+        console.log(cek.data);
+        setLangganan(cek.data);
         setOpen(true)
+
       })
 
     })
@@ -163,11 +173,22 @@ export default function Home({ navigation, route }) {
         }}>
 
           <ListTombol label="BASIC" level={1} onPress={() => navigation.navigate('SoalBasicPilihan')} />
-          <ListTombol level={DATALEVEL.BASIC} label="N5" onPress={() => {
-            DATALEVEL.BASIC == 0 ? Alert.alert(MYAPP, 'Level BASIC belum selesai !') : navigation.navigate('SoalN5Pilihan')
+          <ListTombol level={langganan.n5} label="N5" onPress={() => {
+            langganan.n5 == 0 ? Alert.alert(MYAPP, 'Silahkan Hubungi Admin', [
+              { text: 'NANTI' },
+              {
+                text: 'WHATSAPP',
+                onPress: () => {
+                  let text = `Hallo admin saya username *${user.username}* ingin menggunakan level N5`;
+                  console.log(text)
+                  Linking.openURL('https://wa.me/' + comp.tlp + '?text=' + text);
+
+                }
+              }
+            ]) : navigation.navigate('SoalN5Pilihan')
           }} />
-          <ListTombol level={DATALEVEL.N4} label="N4" onPress={() => {
-            DATALEVEL.N4 == 0 ? Alert.alert(MYAPP, 'Silahkan Hubungi Admin', [
+          <ListTombol level={langganan.n4} label="N4" onPress={() => {
+            langganan.n4 == 0 ? Alert.alert(MYAPP, 'Silahkan Hubungi Admin', [
               { text: 'NANTI' },
               {
                 text: 'WHATSAPP',
