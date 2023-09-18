@@ -13,7 +13,7 @@ import moment from 'moment';
 import 'moment/locale/id';
 import { MyButton } from '../../components';
 
-const ListTombol = ({ onPress, label, selesai = '', jumlah_soal = 50 }) => {
+const ListTombol = ({ onPress, label, selesai = '', jumlah_soal = 50, akhir }) => {
 
     return (
         <TouchableOpacity onPress={onPress} style={{
@@ -35,7 +35,7 @@ const ListTombol = ({ onPress, label, selesai = '', jumlah_soal = 50 }) => {
                 fontFamily: fonts.secondary[400],
                 fontSize: 20,
                 color: colors.white
-            }}>{selesai.toString()}/{jumlah_soal}</Text>
+            }}>{selesai.toString()}/{akhir}</Text>
         </TouchableOpacity>
     )
 }
@@ -143,7 +143,7 @@ export default function SoalN5({ navigation, route }) {
                         justifyContent: 'center'
                     }}>
 
-                        <ListTombol label="MULAI SEMUA SOAL" selesai={SELESAI.reduce((partialSum, a) => partialSum + a, 0)} jumlah_soal={jumlah} onPress={() => {
+                        <ListTombol label="MULAI SEMUA SOAL" selesai={SELESAI.reduce((partialSum, a) => partialSum + a, 0)} jumlah_soal={jumlah} akhir={jumlah} onPress={() => {
 
                             navigation.navigate('SoalTask', {
                                 level: THELEVEL,
@@ -154,12 +154,12 @@ export default function SoalN5({ navigation, route }) {
 
                         }} />
 
-                        {LEVEL.map(i => {
+                        {LEVEL.map((i, index) => {
 
-                            let awal = i * 50;
-                            let akhir = (JUMLAH_SOAL / (JUMLAH_LEVEL)) + (50 * i);
+                            let awal = index * 50;
+                            let akhir = (JUMLAH_SOAL / (JUMLAH_LEVEL)) + (50 * index);
                             return (
-                                <ListTombol label={i} jumlah_soal={jumlah} selesai={SELESAI[i]} onPress={() => {
+                                <ListTombol label={i} jumlah_soal={jumlah} selesai={SELESAI[i]} akhir={akhir} onPress={() => {
                                     // console.log(i)
                                     navigation.navigate('SoalTask', {
                                         level: THELEVEL,

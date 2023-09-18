@@ -183,7 +183,7 @@ export default function SoalTaskSimpan({ navigation, route }) {
         } else if (nilai >= 70 && nilai < 80) {
             setNilaiIndex('Homeru kotoba shikanai desune, senpai hebat');
         } else if (nilai >= 80) {
-            setNilaiIndex('Sasuga senpai, tayorareru hitu desune, Selamat senpai hebat');
+            setNilaiIndex('Sasuga senpai, tayorareru hito desune, Selamat senpai hebat');
         }
         setNILAI(Math.round(nilai, 2));
 

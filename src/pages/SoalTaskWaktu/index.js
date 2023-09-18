@@ -163,19 +163,25 @@ export default function SoalTaskWaktu({ navigation, route }) {
         } else if (nilai >= 70 && nilai < 80) {
             setNilaiIndex('Homeru kotoba shikanai desune, senpai hebat');
         } else if (nilai >= 80) {
-            setNilaiIndex('Sasuga senpai, tayorareru hitu desune, Selamat senpai hebat');
+            setNilaiIndex('Sasuga senpai, tayorareru hito desune, Selamat senpai hebat');
         }
         setNILAI(nilai);
 
+
         const kirim = {
-            nilai: nilai,
+            nilai: Math.round(nilai, 2),
             fid_user: user.id,
             level: route.params.level
         }
 
+        axios.post(apiURL + 'nilai_add', kirim).then(response => {
+            console.log(response.data)
+        })
+
 
 
     }
+
 
     return (
         <SafeAreaView style={{
@@ -1014,7 +1020,14 @@ export default function SoalTaskWaktu({ navigation, route }) {
                     </TouchableOpacity>
 
 
-                    <TouchableOpacity onPress={sendServer} style={{
+                    <TouchableOpacity onPress={() => {
+                        sendServer();
+                        setModal3(true);
+                        let tmpSudah = sudah;
+                        tmpSudah.push(data[nomor].id);
+                        setSudah(tmpSudah);
+                        storeData(kode, tmpSudah);
+                    }} style={{
 
                         padding: 20,
                         borderRadius: 10,
