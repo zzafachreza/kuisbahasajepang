@@ -4,8 +4,9 @@ import { Icon } from 'react-native-elements'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { colors, fonts, windowWidth } from '../../utils'
 import axios from 'axios'
-import { apiURL, getData, storeData } from '../../utils/localStorage'
+import { MYAPP, apiURL, getData, storeData } from '../../utils/localStorage'
 import { useIsFocused } from '@react-navigation/native'
+import { Alert } from 'react-native'
 
 
 const ListTombol = ({ onPress, label }) => {
@@ -178,12 +179,18 @@ export default function SoalN4Pilihan({ navigation, route }) {
                         flex: 1,
                         paddingRight: 5,
                     }}>
-                        <ListTombol label="TERSIMPAN" onPress={() => navigation.navigate('SoalTaskSimpan', {
-                            level: THELEVEL,
-                            awal: 0,
-                            akhir: jumlah,
-                            halaman: 0
-                        })} />
+                        <ListTombol label="TERSIMPAN" onPress={() => {
+                            if (SOALTERSIMPAN == 0) {
+                                Alert.alert(MYAPP, 'Soal tersimpan belum ada !')
+                            } else {
+                                navigation.navigate('SoalTaskSimpan', {
+                                    level: THELEVEL,
+                                    awal: 0,
+                                    akhir: jumlah,
+                                    halaman: 0
+                                })
+                            }
+                        }} />
                     </View>
                     <View style={{
                         flex: 1,
@@ -225,7 +232,7 @@ export default function SoalN4Pilihan({ navigation, route }) {
                                     fontSize: 15,
                                     color: colors.secondary,
                                     textAlign: 'center'
-                                }}>{rank[1].nama_lengkap}</Text>
+                                }}>{rank[1].nama_lengkap.replace(rank[1].nama_lengkap.substring(2, rank[1].nama_lengkap.length - 2), '***')}</Text>
                                 <Text style={{
                                     fontFamily: fonts.secondary[800],
                                     fontSize: 15
@@ -255,7 +262,7 @@ export default function SoalN4Pilihan({ navigation, route }) {
                                     fontSize: 15,
                                     color: colors.secondary,
                                     textAlign: 'center'
-                                }}>{rank[0].nama_lengkap}</Text>
+                                }}>{rank[0].nama_lengkap.replace(rank[0].nama_lengkap.substring(2, rank[0].nama_lengkap.length - 2), '***')}</Text>
                                 <Text style={{
                                     fontFamily: fonts.secondary[800],
                                     fontSize: 15
@@ -287,7 +294,7 @@ export default function SoalN4Pilihan({ navigation, route }) {
                                     fontSize: 15,
                                     color: colors.secondary,
                                     textAlign: 'center'
-                                }}>{rank[2].nama_lengkap}</Text>
+                                }}>{rank[2].nama_lengkap.replace(rank[2].nama_lengkap.substring(2, rank[2].nama_lengkap.length - 2), '***')}</Text>
                                 <Text style={{
                                     fontFamily: fonts.secondary[800],
                                     fontSize: 15

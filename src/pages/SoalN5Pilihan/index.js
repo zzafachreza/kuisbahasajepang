@@ -4,8 +4,9 @@ import { Icon } from 'react-native-elements'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { colors, fonts, windowWidth } from '../../utils'
 import axios from 'axios'
-import { apiURL, getData, storeData } from '../../utils/localStorage'
+import { MYAPP, apiURL, getData, storeData } from '../../utils/localStorage'
 import { useIsFocused } from '@react-navigation/native'
+import { Alert } from 'react-native'
 
 
 const ListTombol = ({ onPress, label }) => {
@@ -181,12 +182,18 @@ export default function SoalN5Pilihan({ navigation, route }) {
                         flex: 1,
                         paddingRight: 5,
                     }}>
-                        <ListTombol label="TERSIMPAN" onPress={() => navigation.navigate('SoalTaskSimpan', {
-                            level: THELEVEL,
-                            awal: 0,
-                            akhir: jumlah,
-                            halaman: 0
-                        })} />
+                        <ListTombol label="TERSIMPAN" onPress={() => {
+                            if (SOALTERSIMPAN == 0) {
+                                Alert.alert(MYAPP, 'Soal tersimpan belum ada !')
+                            } else {
+                                navigation.navigate('SoalTaskSimpan', {
+                                    level: THELEVEL,
+                                    awal: 0,
+                                    akhir: jumlah,
+                                    halaman: 0
+                                })
+                            }
+                        }} />
                     </View>
                     <View style={{
                         flex: 1,

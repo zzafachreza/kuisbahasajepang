@@ -61,7 +61,12 @@ export default function Register({ navigation }) {
     });
 
     const simpan = () => {
-        if (
+        if (!cek) {
+            showMessage({
+                message: 'Kamu belum ceklis syarat dan ketentuan !',
+            });
+        }
+        else if (
             data.nama_lengkap.length === 0 &&
             data.username.length === 0 &&
             data.telepon.length === 0 &&
@@ -245,6 +250,42 @@ export default function Register({ navigation }) {
                 <MyGap jarak={20} />
 
 
+                <View style={{
+                    flexDirection: 'row',
+                    padding: 5,
+                    marginVertical: 5,
+                    alignItems: 'center'
+                }}>
+                    <TouchableOpacity onPress={() => {
+                        cek ? setCek(false) : setCek(true);
+                    }} style={{
+
+                    }}>
+                        <View style={{
+                            marginRight: 5,
+
+                        }}>
+                            <Icon type='ionicon' name={cek ? 'checkbox' : 'checkbox-outline'} color={colors.black} size={windowWidth / 20} />
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('InfoPdf', {
+                        id: 1
+                    })}>
+                        <Text style={{
+                            fontFamily: fonts.secondary[400],
+                            fontSize: windowWidth / 35
+                        }}>Saya telah membaca dan setuju dengan
+
+                            <Text style={{
+                                fontFamily: fonts.secondary[400],
+                                fontSize: windowWidth / 35,
+                                color: colors.primary,
+                            }}> Syarat & Ketentuan</Text>
+
+                        </Text>
+                    </TouchableOpacity>
+
+                </View>
 
 
                 {!loading &&

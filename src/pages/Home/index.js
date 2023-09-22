@@ -208,7 +208,35 @@ export default function Home({ navigation, route }) {
 
 
         </View>}
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        padding: 10,
+      }}>
+        <TouchableOpacity onPress={() => navigation.navigate('InfoPdf', {
+          id: 1
+        })}>
+          <Text style={{
+            fontFamily: fonts.secondary[400],
+            fontSize: windowWidth / 35,
+            color: colors.black,
+          }}>Syarat & Ketentuan
 
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('InfoPdf', {
+          id: 2
+        })}>
+          <Text style={{
+            fontFamily: fonts.secondary[400],
+            fontSize: windowWidth / 35,
+            color: colors.black,
+          }}>Kebijakan Privasi
+
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView >
   )
 }

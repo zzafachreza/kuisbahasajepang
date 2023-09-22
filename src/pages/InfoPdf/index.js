@@ -17,7 +17,15 @@ import Pdf from 'react-native-pdf';
 export default function InfoPdf({ navigation, route }) {
 
 
-    const item = route.params;
+    const ID = route.params.id;
+    const [data, setData] = useState({});
+
+    useEffect(() => {
+        axios.post(apiURL + 'get_pdf', { id: ID }).then(res => {
+
+            setData(res.data[0])
+        })
+    }, [])
 
 
 
@@ -46,18 +54,14 @@ export default function InfoPdf({ navigation, route }) {
                     fontFamily: fonts.secondary[600],
                     fontSize: 15,
                     flex: 1,
-                }}>{route.params.nama_rs}</Text>
-                <Image source={{ uri: route.params.image }} style={{
-                    width: 80,
-                    height: 50,
-                    resizeMode: 'contain'
-                }} />
+                }}>{data.keterangan}</Text>
+
             </View>
             <Pdf
                 trustAllCerts={false}
                 // source={{ uri: webURL + data.foto_pdf, cache: true }}
                 source={{
-                    uri: route.params.pdf, cache: true
+                    uri: data.pdf, cache: true
                 }}
                 onLoadComplete={(numberOfPages, filePath) => {
                     console.log(`Number of pages: ${numberOfPages}`);
