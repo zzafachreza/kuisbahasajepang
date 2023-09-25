@@ -38,6 +38,7 @@ export default function SoalBasicPilihan({ navigation, route }) {
     const THELEVEL = 'BASIC';
     const __getSoalTersimpan = () => {
         getData('user').then(u => {
+            console.log('ID USER', u.id)
             axios.post(apiURL + 'get_jumlah_soal_simpan', {
                 level: THELEVEL,
                 fid_user: u.id

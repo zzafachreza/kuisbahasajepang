@@ -1028,7 +1028,14 @@ export default function SoalTaskSimpan({ navigation, route }) {
                             color: colors.white
                         }}>{data[nomor].d}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setModal3(true)} style={{
+                    <TouchableOpacity onPress={() => {
+                        sendServer();
+                        setModal3(true);
+                        let tmpSudah = sudah;
+                        tmpSudah.push(data[nomor].id);
+                        setSudah(tmpSudah);
+                        storeData(kode, tmpSudah);
+                    }} style={{
 
                         padding: 20,
                         borderRadius: 10,
