@@ -252,7 +252,7 @@ export default function Register({ navigation }) {
 
                 <View style={{
                     flexDirection: 'row',
-                    padding: 5,
+                    padding: 10,
                     marginVertical: 5,
                     alignItems: 'center'
                 }}>
@@ -268,24 +268,43 @@ export default function Register({ navigation }) {
                             <Icon type='ionicon' name={cek ? 'checkbox' : 'checkbox-outline'} color={colors.black} size={windowWidth / 20} />
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('InfoPdf', {
-                        id: 1
-                    })}>
-                        <Text style={{
-                            fontFamily: fonts.secondary[400],
-                            fontSize: windowWidth / 35
-                        }}>Saya telah membaca dan setuju dengan
-
+                    <View>
+                        <TouchableOpacity onPress={() => navigation.navigate('InfoPdf', {
+                            id: 1
+                        })}>
                             <Text style={{
                                 fontFamily: fonts.secondary[400],
-                                fontSize: windowWidth / 35,
-                                color: colors.primary,
-                            }}> Syarat & Ketentuan</Text>
+                                fontSize: windowWidth / 35
+                            }}>Saya telah membaca dan setuju dengan
 
-                        </Text>
-                    </TouchableOpacity>
+                                <Text style={{
+                                    fontFamily: fonts.secondary[400],
+                                    fontSize: windowWidth / 35,
+                                    color: colors.primary,
+                                }}> Syarat & Ketentuan</Text>
+
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('InfoPdf', {
+                            id: 2
+                        })}>
+                            <Text style={{
+                                fontFamily: fonts.secondary[400],
+                                fontSize: windowWidth / 35
+                            }}>Dan
+
+                                <Text style={{
+                                    fontFamily: fonts.secondary[400],
+                                    fontSize: windowWidth / 35,
+                                    color: colors.primary,
+                                }}> Kebijakan Privasi</Text>
+
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
 
                 </View>
+
 
 
                 {!loading &&
