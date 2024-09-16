@@ -15,6 +15,7 @@ import SoundPlayer from 'react-native-sound-player'
 import ViewShot from "react-native-view-shot";
 import Share from 'react-native-share';
 import { showMessage } from 'react-native-flash-message';
+import Tts from 'react-native-tts';
 
 export default function SoalTaskSimpan({ navigation, route }) {
 
@@ -36,6 +37,29 @@ export default function SoalTaskSimpan({ navigation, route }) {
     const kode = route.params.level + route.params.halaman;
 
     const [sudah, setSudah] = useState([]);
+    const InitialTTS = async () => {
+        Tts.voices().then(voices => {
+            let tmpArr = [];
+            let nomor = 7;
+            voices.map((i, index) => {
+                tmpArr.push(i);
+                console.log(index + '-' + i.language)
+            });
+
+            console.log(tmpArr[nomor])
+            Tts.setDefaultLanguage(tmpArr[nomor].language);
+            Tts.setDefaultVoice(tmpArr[nomor].id);
+        });
+
+
+
+
+        // Tts.addEventListener('tts-start', (event) => console.log("start", event));
+        // Tts.addEventListener('tts-progress', (event) => console.log("progress", event));
+        // Tts.addEventListener('tts-finish', (event) => console.log("finish", event));
+        // Tts.addEventListener('tts-cancel', (event) => console.log("cancel", event));
+
+    }
 
     const __getTransaction = () => {
 
@@ -127,7 +151,7 @@ export default function SoalTaskSimpan({ navigation, route }) {
     const [nomor, setNomor] = useState(0);
     const [pilih, setPilih] = useState([]);
     useEffect(() => {
-
+        InitialTTS();
 
         const backAction = () => {
             Alert.alert('Kamu yakin akan keluar dari mengerjakan soal ?', '', [
@@ -639,7 +663,7 @@ export default function SoalTaskSimpan({ navigation, route }) {
                 </TouchableOpacity>
 
 
-                {!soalTersimpan.includes(data[nomor].id || pilih[nomor].a || pilih[nomor].b || pilih[nomor].c || pilih[nomor].d || data[nomor].tersimpan > 0) &&
+                {!soalTersimpan.includes(data[nomor].id) &&
                     <View style={{
                         flex: 1,
                         alignItems: 'center'
@@ -653,14 +677,13 @@ export default function SoalTaskSimpan({ navigation, route }) {
                             }
 
                             console.log(kirim);
-                            axios.post(apiURL + 'save_soal', kirim).then(res => {
+                            axios.post(apiURL + 'unsave_soal', kirim).then(res => {
                                 console.log(res.data);
-
                                 showMessage({
                                     type: 'success',
-                                    message: 'Soal berhasil di save !'
+                                    message: 'Soal berhasil di unsave !'
                                 })
-                                setSoalTersimpan(res.data)
+                                setSoalTersimpan(soalTersimpan.filter(i => i !== data[nomor].id))
 
 
                             })
@@ -1049,6 +1072,33 @@ export default function SoalTaskSimpan({ navigation, route }) {
                             fontSize: 17,
                             color: colors.white
                         }}>Nilai</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => {
+                        Tts.setDefaultRate(0.5);
+                        Tts.setDefaultPitch(1.5);
+                        Tts.speak(data[nomor].suara, {
+                            androidParams: {
+                                KEY_PARAM_PAN: +1,
+                                KEY_PARAM_VOLUME: 1,
+                                KEY_PARAM_STREAM: 'STREAM_MUSIC',
+                            },
+                        });
+                        console.log(data[nomor].hiragana)
+                    }} style={{
+
+                        padding: 20,
+                        borderRadius: 10,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: colors.tertiary,
+                        marginTop: 10,
+                    }}>
+                        <Text style={{
+                            fontFamily: fonts.secondary[600],
+                            fontSize: 17,
+                            color: colors.white
+                        }}>Play Sound</Text>
                     </TouchableOpacity>
                 </View>
 

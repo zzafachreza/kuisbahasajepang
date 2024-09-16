@@ -16,6 +16,7 @@ import ViewShot from "react-native-view-shot";
 import Share from 'react-native-share';
 import { showMessage } from 'react-native-flash-message';
 
+
 export default function SoalTask({ navigation, route }) {
 
     const ref = useRef();
@@ -36,6 +37,8 @@ export default function SoalTask({ navigation, route }) {
     const kode = route.params.level + route.params.halaman;
 
     const [sudah, setSudah] = useState([]);
+
+
 
     const __getTransaction = () => {
 
@@ -648,7 +651,7 @@ export default function SoalTask({ navigation, route }) {
                 </TouchableOpacity>
 
 
-                {!soalTersimpan.includes(data[nomor].id || pilih[nomor].a || pilih[nomor].b || pilih[nomor].c || pilih[nomor].d || data[nomor].tersimpan > 0) &&
+                {!soalTersimpan.includes(data[nomor].id) &&
                     <View style={{
                         flex: 1,
                         alignItems: 'center'
@@ -706,6 +709,8 @@ export default function SoalTask({ navigation, route }) {
                                 halaman: data[nomor].halaman
                             }
 
+                            console.log('soal tersimpan', soalTersimpan.filter(i => i !== data[nomor].id))
+
                             console.log(kirim);
                             axios.post(apiURL + 'unsave_soal', kirim).then(res => {
                                 console.log(res.data);
@@ -713,7 +718,7 @@ export default function SoalTask({ navigation, route }) {
                                     type: 'success',
                                     message: 'Soal berhasil di unsave !'
                                 })
-                                setSoalTersimpan(res.data)
+                                setSoalTersimpan(soalTersimpan.filter(i => i !== data[nomor].id))
                                 // let tmpSoal = soalTersimpan.filter(i => i.indexOf(data[nomor].id) > -1);
                                 // setSoalTersimpan(tmpSoal)
 
@@ -775,24 +780,26 @@ export default function SoalTask({ navigation, route }) {
             {open && <View style={{
                 flex: 1,
                 backgroundColor: colors.white,
-                margin: 20,
+                marginTop: 14,
+                margin: 4,
                 borderRadius: 20,
             }}>
                 <View style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    padding: 10,
-                    marginVertical: 10,
-                    borderRadius: 20,
+                    // backgroundColor: 'red',
+                    padding: 0,
                 }}>
                     <Text style={{
+                        textAlign: 'center',
                         fontFamily: fonts.primary.normal,
-                        fontSize: 25,
+                        fontSize: 24,
                         color: colors.black
                     }}>{data[nomor].hiragana}</Text>
                     <Text style={{
+                        textAlign: 'center',
                         fontFamily: fonts.primary.normal,
-                        fontSize: 25,
+                        fontSize: 24,
                         color: colors.black,
                         marginTop: 10,
                     }}>{data[nomor].kanji}</Text>

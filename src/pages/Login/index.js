@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, ActivityIndicator, TouchableOpacity, BackHandler, Alert, Linking } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, ActivityIndicator, TouchableOpacity, BackHandler, Alert, Linking, TouchableWithoutFeedback } from 'react-native';
 import { fonts, windowWidth, colors, windowHeight } from '../../utils';
 import { MyInput, MyGap, MyButton } from '../../components';
 import axios from 'axios';
 import { apiURL, api_token, MYAPP, storeData } from '../../utils/localStorage';
 import { showMessage } from 'react-native-flash-message';
+import { Icon } from 'react-native-elements';
 
 
 export default function Login({ navigation }) {
+
+  const [cek, setCek] = useState(false);
 
   const [kirim, setKirim] = useState({
     api_token: api_token,
@@ -24,8 +27,10 @@ export default function Login({ navigation }) {
 
   const masuk = () => {
 
-
-    if (kirim.username == null && kirim.password == null) {
+    if (!cek) {
+      Alert.alert(MYAPP, 'Silahkan Centang Syarat & Ketentuan Dan Kebijakan Privasi !');
+    }
+    else if (kirim.username == null && kirim.password == null) {
       Alert.alert(MYAPP, 'Username dan Password tidak boleh kosong !');
     } else if (kirim.username == null) {
       Alert.alert(MYAPP, 'Username tidak boleh kosong !');
@@ -66,6 +71,7 @@ export default function Login({ navigation }) {
   useEffect(() => {
 
     axios.post(apiURL + 'company').then(res => {
+      console.log(res.data.data.website)
       setComp(res.data.data);
     })
 
@@ -127,16 +133,85 @@ export default function Login({ navigation }) {
             iconname="lock-closed"
             placeholder="Masukan kata sandi"
           />
-          <MyGap jarak={40} />
+          <MyGap jarak={20} />
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center'
+          }}>
+            <TouchableOpacity onPress={() => setCek(!cek)} style={{
+              paddingRight: 12,
+            }}>
+              <Icon type='ionicon' size={25} name={cek ? 'checkbox' : 'checkbox-outline'} />
+            </TouchableOpacity>
+            <Text style={{
+              fontFamily: fonts.secondary[600],
+              fontSize: 12,
+              maxWidth: '80%'
+            }}>
+              Saya telah membaca dan setuju dengan <TouchableWithoutFeedback onPress={() => navigation.navigate('InfoPdf', {
+                id: 1
+              })}><Text style={{
+                color: colors.primary
+              }}>Syarat & Ketentuan</Text></TouchableWithoutFeedback> Dan <TouchableWithoutFeedback onPress={() => navigation.navigate('InfoPdf', {
+                id: 2
+              })}><Text style={{
+                color: colors.primary
+              }}>Kebijakan Privasi</Text></TouchableWithoutFeedback>
+            </Text>
+          </View>
+          <MyGap jarak={20} />
           {!loading &&
 
 
-            <MyButton
-              onPress={masuk}
-              title="Log in"
-              warna={colors.primary}
-              Icons="log-in-outline"
-            />
+            <>
+              <MyButton
+                onPress={masuk}
+                title="Log in"
+                warna={colors.primary}
+                Icons="log-in-outline"
+              />
+              <MyGap jarak={10} />
+              <MyButton
+                onPress={() => Linking.openURL(comp.website)}
+                title="Dapatkan Akun Login"
+                warna={colors.secondary}
+                Icons="log-in-outline"
+              />
+              <MyGap jarak={10} />
+              <MyButton
+                onPress={() => {
+                  setLoading(true);
+                  console.log(kirim);
+
+                  axios
+                    .post(apiURL + 'login', {
+                      api_token: api_token,
+                      username: 'demo',
+                      password: '123'
+                    })
+                    .then(res => {
+                      setLoading(false);
+                      console.log(res.data);
+                      if (res.data.status == 404) {
+                        showMessage({
+                          type: 'danger',
+                          message: res.data.message
+                        })
+                      } else {
+                        storeData('user', res.data.data);
+                        navigation.replace('Home')
+                      }
+
+                    });
+
+                }}
+                title="Coba Aplikasi"
+                warna={colors.tertiary}
+                Icons="log-in-outline"
+              />
+            </>
+
+
 
           }
 
@@ -150,11 +225,11 @@ export default function Login({ navigation }) {
         </View>}
       </ScrollView>
 
-      <TouchableOpacity activeOpacity={1} onPress={() => {
+      {/* <TouchableOpacity activeOpacity={1} onPress={() => {
 
         navigation.navigate('Register')
       }} style={{
-        padding: 10,
+        padding: 10,   
         backgroundColor: colors.white,
         justifyContent: 'center',
         alignItems: 'center'
@@ -164,7 +239,7 @@ export default function Login({ navigation }) {
         fontFamily: fonts.primary[400],
         textAlign: 'center',
         color: colors.primary
-      }}>TIdak punya akun ? daftar disini</Text></TouchableOpacity>
+      }}>TIdak punya akun ? daftar disini</Text></TouchableOpacity> */}
     </>
   );
 }

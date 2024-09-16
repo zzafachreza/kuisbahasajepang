@@ -177,11 +177,12 @@ export default function Home({ navigation, route }) {
             langganan.n5 == 0 ? Alert.alert(MYAPP, 'Silahkan Hubungi Admin', [
               { text: 'NANTI' },
               {
-                text: 'WHATSAPP',
+                text: 'LOGIN',
                 onPress: () => {
-                  let text = `Hallo admin saya username *${user.username}* ingin menggunakan level N5`;
-                  console.log(text)
-                  Linking.openURL('https://wa.me/' + comp.tlp + '?text=' + text);
+                  navigation.replace('Login');
+                  // let text = `Hallo admin saya username *${user.username}* ingin menggunakan level N5`;
+                  // console.log(text)
+                  // Linking.openURL('https://wa.me/' + comp.tlp + '?text=' + text);
 
                 }
               }
@@ -191,18 +192,30 @@ export default function Home({ navigation, route }) {
             langganan.n4 == 0 ? Alert.alert(MYAPP, 'Silahkan Hubungi Admin', [
               { text: 'NANTI' },
               {
-                text: 'WHATSAPP',
+                text: 'LOGIN',
                 onPress: () => {
-                  let text = `Hallo admin saya username *${user.username}* ingin menggunakan level N4`;
-                  console.log(text)
-                  Linking.openURL('https://wa.me/' + comp.tlp + '?text=' + text);
-
+                  // let text = `Hallo admin saya username *${user.username}* ingin menggunakan level N4`;
+                  // console.log(text)
+                  // Linking.openURL('https://wa.me/' + comp.tlp + '?text=' + text);
+                  navigation.replace('Login');
                 }
               }
             ]) : navigation.navigate('SoalN4Pilihan')
           }} />
-          <ListTombol level={0} label="N3" />
-          <ListTombol level={0} label="N2" />
+          <ListTombol level={user.username == 'demo' ? 0 : 1} onPress={() => {
+            if (user.username !== 'demo') {
+              navigation.navigate('SoalN3Pilihan')
+            } else {
+              navigation.replace('Login');
+            }
+          }} label="N3" />
+          <ListTombol level={user.username == 'demo' ? 0 : 1} onPress={() => {
+            if (user.username !== 'demo') {
+              navigation.navigate('SoalN2Pilihan')
+            } else {
+              navigation.replace('Login');
+            }
+          }} label="N2" />
 
 
 

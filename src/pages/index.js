@@ -18,6 +18,10 @@ import SoalN5Pilihan from './SoalN5Pilihan';
 import SoalN4Pilihan from './SoalN4Pilihan';
 import SoalTaskWaktu from './SoalTaskWaktu';
 import SoalTaskSimpan from './SoalTaskSimpan';
+import SoalN3 from './SoalN3';
+import SoalN3Pilihan from './SoalN3Pilihan';
+import SoalN2Pilihan from './SoalN2Pilihan';
+import SoalN2 from './SoalN2';
 
 
 
@@ -42,5 +46,9 @@ export {
   SoalN5Pilihan,
   SoalN4Pilihan,
   SoalTaskWaktu,
-  SoalTaskSimpan
+  SoalTaskSimpan,
+  SoalN3,
+  SoalN3Pilihan,
+  SoalN2Pilihan,
+  SoalN2
 };

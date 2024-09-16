@@ -133,7 +133,7 @@ export default function ({ navigation, route }) {
 
                             color: colors.black
                         }}>Profile Saya</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('AccountEdit', user)} style={{
+                        {/* <TouchableOpacity onPress={() => navigation.navigate('AccountEdit', user)} style={{
                             padding: 5,
                             borderRadius: 5,
                         }}>
@@ -143,50 +143,18 @@ export default function ({ navigation, route }) {
                                 fontSize: windowWidth / 18,
                                 color: colors.primary
                             }}>Ubah</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
 
                     <View style={{
                         backgroundColor: colors.white,
                         margin: 10,
                     }}>
-                        <View style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                        }}>
-                            <View>
-                                <Image source={{
-                                    uri: user.foto_user
-                                }} style={{
-                                    width: 80,
-                                    height: 80,
-                                    borderRadius: 40,
-                                }} />
-                            </View>
-                            <View style={{
-                                paddingLeft: 10,
-                            }}>
-                                <Text style={{
-                                    fontFamily: fonts.primary[600],
-                                    fontSize: windowWidth / 22,
-                                    color: colors.black
-                                }}>Halo,</Text>
-                                <Text style={{
-                                    fontFamily: fonts.primary[400],
-                                    fontSize: windowWidth / 22,
-                                    color: colors.black
-                                }}>{user.nama_lengkap}</Text>
-                                <Text style={{
-                                    fontFamily: fonts.primary[600],
-                                    fontSize: windowWidth / 28,
-                                    color: colors.primary
-                                }}>{user.level}</Text>
-                            </View>
-                        </View>
+
                         <View style={{ padding: 10, }}>
                             <MyList label="Username" value={user.username} />
                             <MyList label="Telepon / Email" value={user.telepon} />
-                            <MyList label="Kota TInggal" value={user.alamat} />
+                            {/* <MyList label="Kota TInggal" value={user.alamat} /> */}
 
 
                         </View>

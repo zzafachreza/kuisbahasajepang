@@ -22,6 +22,10 @@ import {
   SoalN4Pilihan,
   SoalTaskSimpan,
   SoalTaskWaktu,
+  SoalN3,
+  SoalN2,
+  SoalN3Pilihan,
+  SoalN2Pilihan,
 
 
 
@@ -197,6 +201,21 @@ export default function Router() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="SoalN3"
+        component={SoalN3}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="SoalN2"
+        component={SoalN2}
+        options={{
+          headerShown: false,
+        }}
+      />
 
 
 
@@ -220,6 +239,21 @@ export default function Router() {
       <Stack.Screen
         name="SoalN4Pilihan"
         component={SoalN4Pilihan}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="SoalN3Pilihan"
+        component={SoalN3Pilihan}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SoalN2Pilihan"
+        component={SoalN2Pilihan}
         options={{
           headerShown: false,
         }}

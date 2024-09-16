@@ -33,12 +33,11 @@ const ListTombol = ({ onPress, label }) => {
 
 
 
-export default function SoalBasicPilihan({ navigation, route }) {
+export default function SoalN2Pilihan({ navigation, route }) {
 
-    const THELEVEL = 'BASIC';
+    const THELEVEL = 'N2';
     const __getSoalTersimpan = () => {
         getData('user').then(u => {
-            console.log('ID USER', u.id)
             axios.post(apiURL + 'get_jumlah_soal_simpan', {
                 level: THELEVEL,
                 fid_user: u.id
@@ -49,8 +48,7 @@ export default function SoalBasicPilihan({ navigation, route }) {
         })
     }
 
-
-    const JUMLAH_SOAL = 200;
+    const JUMLAH_SOAL = 100;
     const JUMLAH_LEVEL = JUMLAH_SOAL / 50;
 
     const [user, setUser] = useState({});
@@ -71,12 +69,10 @@ export default function SoalBasicPilihan({ navigation, route }) {
 
     }
 
-    const setCharAt = (str, index, chr) => {
-        if (index > str.length - 1) return str;
-        return str.substring(0, index) + chr + str.substring(index + 1);
-    }
-    const [jumlah, setJumlah] = useState(0);
     const [SOALTERSIMPAN, SETSOALTERSIMPAN] = useState(0)
+
+    const [jumlah, setJumlah] = useState(0);
+
     const __getJumlahSoal = () => {
         console.log('cek')
         axios.post(apiURL + 'get_jumlah_soal', {
@@ -86,7 +82,6 @@ export default function SoalBasicPilihan({ navigation, route }) {
             setJumlah(res.data)
         })
     }
-
     const isFocus = useIsFocused();
     useEffect(() => {
 
@@ -146,7 +141,7 @@ export default function SoalBasicPilihan({ navigation, route }) {
                     textAlign: 'center',
                     fontFamily: fonts.secondary[800],
                     fontSize: 20,
-                }}>BASIC</Text>
+                }}>{THELEVEL}</Text>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={{
                     padding: 10,
                 }}>
@@ -158,7 +153,7 @@ export default function SoalBasicPilihan({ navigation, route }) {
                     textAlign: 'center',
                     fontFamily: fonts.secondary[800],
                     fontSize: 20,
-                }}>TINGKAT DASAR</Text>
+                }}>TINGKAT MAHIR</Text>
                 <Text style={{
                     textAlign: 'center',
                     fontFamily: fonts.secondary[800],
@@ -171,9 +166,9 @@ export default function SoalBasicPilihan({ navigation, route }) {
                 justifyContent: 'center',
                 padding: 20
             }}>
-                <ListTombol label="MULAI SOAL DAN SIMPAN" onPress={() => navigation.navigate('SoalBasic')} />
+                <ListTombol label="MULAI SOAL DAN SIMPAN" onPress={() => navigation.navigate('SoalN2')} />
                 <ListTombol label="MULAI SOAL CEPAT" onPress={() => navigation.navigate('SoalTaskWaktu', {
-                    level: 'BASIC',
+                    level: THELEVEL,
                     halaman: 0
                 })} />
 
@@ -184,7 +179,6 @@ export default function SoalBasicPilihan({ navigation, route }) {
                         flex: 1,
                         paddingRight: 5,
                     }}>
-
                         <ListTombol label="TERSIMPAN" onPress={() => {
                             if (SOALTERSIMPAN == 0) {
                                 Alert.alert(MYAPP, 'Soal tersimpan belum ada !')

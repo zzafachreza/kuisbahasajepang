@@ -203,7 +203,7 @@ export default function SoalN5Pilihan({ navigation, route }) {
                     </View>
                 </View>
 
-                {open && rank.length > 2 &&
+                {/* {open && rank.length > 2 &&
                     <View style={{
                         flexDirection: 'row',
                         padding: 10,
@@ -305,7 +305,7 @@ export default function SoalN5Pilihan({ navigation, route }) {
                             </View>
                         </View>
                     </View>
-                }
+                } */}
             </View>
         </SafeAreaView>
     )
