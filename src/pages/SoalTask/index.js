@@ -780,26 +780,27 @@ export default function SoalTask({ navigation, route }) {
             {open && <View style={{
                 flex: 1,
                 backgroundColor: colors.white,
-                marginTop: 14,
+                marginTop: 12,
                 margin: 4,
                 borderRadius: 20,
             }}>
                 <View style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    // backgroundColor: 'red',
+
                     padding: 0,
                 }}>
                     <Text style={{
+                        paddingTop: 8,
                         textAlign: 'center',
                         fontFamily: fonts.primary.normal,
-                        fontSize: 24,
+                        fontSize: 23,
                         color: colors.black
                     }}>{data[nomor].hiragana}</Text>
                     <Text style={{
                         textAlign: 'center',
                         fontFamily: fonts.primary.normal,
-                        fontSize: 24,
+                        fontSize: 23,
                         color: colors.black,
                         marginTop: 10,
                     }}>{data[nomor].kanji}</Text>

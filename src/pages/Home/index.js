@@ -62,7 +62,7 @@ export default function Home({ navigation, route }) {
       axios.post(apiURL + 'cek_langganan', {
         id: u.id
       }).then(cek => {
-        console.log(cek.data);
+        console.log('langganan', cek.data);
         setLangganan(cek.data);
         setOpen(true)
 
@@ -202,20 +202,39 @@ export default function Home({ navigation, route }) {
               }
             ]) : navigation.navigate('SoalN4Pilihan')
           }} />
-          <ListTombol level={user.username == 'demo' ? 0 : 1} onPress={() => {
-            if (user.username !== 'demo') {
-              navigation.navigate('SoalN3Pilihan')
-            } else {
-              navigation.replace('Login');
-            }
-          }} label="N3" />
-          <ListTombol level={user.username == 'demo' ? 0 : 1} onPress={() => {
-            if (user.username !== 'demo') {
-              navigation.navigate('SoalN2Pilihan')
-            } else {
-              navigation.replace('Login');
-            }
-          }} label="N2" />
+
+
+          <ListTombol level={langganan.n3} label="N3" onPress={() => {
+            langganan.n3 == 0 ? Alert.alert(MYAPP, 'Silahkan Hubungi Admin', [
+              { text: 'NANTI' },
+              {
+                text: 'LOGIN',
+                onPress: () => {
+                  // let text = `Hallo admin saya username *${user.username}* ingin menggunakan level N4`;
+                  // console.log(text)
+                  // Linking.openURL('https://wa.me/' + comp.tlp + '?text=' + text);
+                  navigation.replace('Login');
+                }
+              }
+            ]) : navigation.navigate('SoalN3Pilihan')
+          }} />
+
+          <ListTombol level={langganan.n2} label="N2" onPress={() => {
+            langganan.n2 == 0 ? Alert.alert(MYAPP, 'Silahkan Hubungi Admin', [
+              { text: 'NANTI' },
+              {
+                text: 'LOGIN',
+                onPress: () => {
+                  // let text = `Hallo admin saya username *${user.username}* ingin menggunakan level N4`;
+                  // console.log(text)
+                  // Linking.openURL('https://wa.me/' + comp.tlp + '?text=' + text);
+                  navigation.replace('Login');
+                }
+              }
+            ]) : navigation.navigate('SoalN2Pilihan')
+          }} />
+
+
 
 
 

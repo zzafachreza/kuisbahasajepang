@@ -1075,16 +1075,21 @@ export default function SoalTaskSimpan({ navigation, route }) {
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => {
-                        Tts.setDefaultRate(0.5);
-                        Tts.setDefaultPitch(1.5);
-                        Tts.speak(data[nomor].suara, {
-                            androidParams: {
-                                KEY_PARAM_PAN: +1,
-                                KEY_PARAM_VOLUME: 1,
-                                KEY_PARAM_STREAM: 'STREAM_MUSIC',
-                            },
-                        });
-                        console.log(data[nomor].hiragana)
+
+                        console.log(data[nomor].suara)
+                        if (data[nomor].suara.length > 0) {
+                            Tts.setDefaultRate(0.5);
+                            Tts.setDefaultPitch(1.5);
+                            Tts.speak(data[nomor].suara, {
+                                androidParams: {
+                                    KEY_PARAM_PAN: +1,
+                                    KEY_PARAM_VOLUME: 1,
+                                    KEY_PARAM_STREAM: 'STREAM_MUSIC',
+                                },
+                            });
+                        } else {
+                            Alert.alert(MYAPP, 'Suara belum tersedia')
+                        }
                     }} style={{
 
                         padding: 20,
