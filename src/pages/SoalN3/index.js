@@ -18,7 +18,7 @@ const ListTombol = ({ onPress, label, selesai = '', jumlah_soal = 50, akhir }) =
     return (
         <TouchableOpacity onPress={onPress} style={{
             backgroundColor: colors.secondary,
-            padding: 20,
+            height: windowHeight / 8,
             borderRadius: 10,
             borderWidth: 3,
             marginVertical: 10,
@@ -28,12 +28,12 @@ const ListTombol = ({ onPress, label, selesai = '', jumlah_soal = 50, akhir }) =
         }}>
             <Text style={{
                 fontFamily: fonts.secondary[800],
-                fontSize: 25,
+                fontSize: 20,
                 color: colors.white
             }}>{label}</Text>
             <Text style={{
                 fontFamily: fonts.secondary[400],
-                fontSize: 20,
+                fontSize: 16,
                 color: colors.white
             }}>{selesai.toString()}/{akhir}</Text>
         </TouchableOpacity>

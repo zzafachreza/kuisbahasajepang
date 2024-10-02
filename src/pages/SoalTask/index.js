@@ -789,21 +789,24 @@ export default function SoalTask({ navigation, route }) {
                     alignItems: 'center',
 
                     padding: 0,
+                    marginBottom: 10,
                 }}>
                     <Text style={{
-                        paddingTop: 8,
+                        // paddingTop: 8,
                         textAlign: 'center',
                         fontFamily: fonts.primary.normal,
+                        lineHeight: 30,
                         fontSize: 23,
                         color: colors.black
                     }}>{data[nomor].hiragana}</Text>
-                    <Text style={{
+                    {data[nomor].kanji.length > 0 && <Text style={{
                         textAlign: 'center',
                         fontFamily: fonts.primary.normal,
                         fontSize: 23,
+                        lineHeight: 30,
                         color: colors.black,
                         marginTop: 10,
-                    }}>{data[nomor].kanji}</Text>
+                    }}>{data[nomor].kanji}</Text>}
                 </View>
 
                 <View style={{

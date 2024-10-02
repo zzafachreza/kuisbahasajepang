@@ -675,30 +675,34 @@ export default function SoalTaskWaktu({ navigation, route }) {
             {open && <View style={{
                 flex: 1,
                 backgroundColor: colors.white,
-                margin: 20,
+                marginTop: 12,
+                margin: 4,
                 borderRadius: 20,
             }}>
                 <View style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    padding: 10,
-                    backgroundColor: colors.white,
-                    margin: 20,
-                    borderRadius: 20,
+
+                    padding: 0,
+                    marginBottom: 10,
                 }}>
                     <Text style={{
+                        // paddingTop: 8,
+                        textAlign: 'center',
                         fontFamily: fonts.primary.normal,
-                        fontSize: 25,
+                        lineHeight: 30,
+                        fontSize: 23,
                         color: colors.black
                     }}>{data[nomor].hiragana}</Text>
-                    <Text style={{
+                    {data[nomor].kanji.length > 0 && <Text style={{
+                        textAlign: 'center',
                         fontFamily: fonts.primary.normal,
-                        fontSize: 25,
+                        fontSize: 23,
+                        lineHeight: 30,
                         color: colors.black,
                         marginTop: 10,
-                    }}>{data[nomor].kanji}</Text>
+                    }}>{data[nomor].kanji}</Text>}
                 </View>
-
                 <View style={{
                     flex: 1,
                     padding: 20,

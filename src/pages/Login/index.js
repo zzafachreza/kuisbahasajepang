@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, ActivityIndicator, TouchableOpacity, BackHandler, Alert, Linking, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Platform, Text, View, Image, ScrollView, ActivityIndicator, TouchableOpacity, BackHandler, Alert, Linking, TouchableWithoutFeedback } from 'react-native';
 import { fonts, windowWidth, colors, windowHeight } from '../../utils';
 import { MyInput, MyGap, MyButton } from '../../components';
 import axios from 'axios';
@@ -20,6 +20,7 @@ export default function Login({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   const [comp, setComp] = useState({});
+
 
 
 
@@ -70,8 +71,9 @@ export default function Login({ navigation }) {
 
   useEffect(() => {
 
+
     axios.post(apiURL + 'company').then(res => {
-      console.log(res.data.data.website)
+      console.log('cek', res.data.data.website)
       setComp(res.data.data);
     })
 
@@ -172,7 +174,14 @@ export default function Login({ navigation }) {
               />
               <MyGap jarak={10} />
               <MyButton
-                onPress={() => Linking.openURL(comp.website)}
+                onPress={() => {
+                  if (!cek) {
+                    Alert.alert(MYAPP, 'Silahkan Centang Syarat & Ketentuan Dan Kebijakan Privasi !');
+                  } else {
+                    Linking.openURL(comp.website)
+                  }
+
+                }}
                 title="Dapatkan Akun Login"
                 warna={colors.secondary}
                 Icons="log-in-outline"
@@ -180,7 +189,7 @@ export default function Login({ navigation }) {
               <MyGap jarak={10} />
               <MyButton
                 onPress={() => {
-                  setLoading(true);
+                  // setLoading(true);
                   console.log(kirim);
 
                   axios
